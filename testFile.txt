@@ -1,0 +1,7 @@
+let i=0;
+
+for(let k=0; k<5; k = k + 1){
+    for(let j=k; j<5; j = j + 1){
+        i = i + 1;
+    }
+}
