@@ -77,4 +77,18 @@ public class DataTest {
         Data data = new Data(input);
         assertEquals(data.getType(), DataTypes.Boolean);
     }
+
+    @Test
+    public void correctlySetsFunctionType() throws Exception{
+        String function = "function hi(){let wassup = 10;}";
+        Data data = new Data(function, DataTypes.Function);
+        assertEquals(data.getType(), DataTypes.Function);
+    }
+
+    @Test
+    public void correctlyStoresFunctionCode() throws Exception{
+        String function = "function hi(){let wassup = 10;}";
+        Data data = new Data(function, DataTypes.Function);
+        assertEquals(function, data.getData());
+    }
 }

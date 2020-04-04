@@ -1,6 +1,7 @@
 package com;
 
 import com.Data.Data;
+import com.Functions.Function;
 import com.Scopes.Scope;
 import com.Util.StringHelpers;
 
@@ -60,26 +61,10 @@ public class CodeLine {
             if(splitExpression.get(i).equals("")){
                 throw new Exception("Poorly formatted expression");
             }
-            dataItems[i] = parseSingleItem(splitExpression.get(i).trim());
+            Element element = new Element(splitExpression.get(i).trim(), scope);
+            dataItems[i] = element.convertElementToData();
         }
         return evaluateExpression(Arrays.asList(dataItems), operands);
-    }
-
-    private Data parseSingleItem(String item) throws Exception{
-        if (isPrimitive(item)){
-            return new Data(item);
-        } else {
-            Data currentData = scope.getVariable(item);
-            String currentDataString = currentData.getData().toString();
-            return new Data(currentDataString, currentData.getType());
-        }
-    }
-
-    private boolean isPrimitive(String word){
-        boolean isString = word.contains("\"");
-        boolean isNumber = word.length() > 0 && Character.isDigit(word.charAt(0));
-        boolean isBoolean = word.equals("True") || word.equals("False");
-        return  isString || isNumber || isBoolean;
     }
 
     private Data evaluateExpression(List<Data> dataElements, List<String> operators) throws Exception{

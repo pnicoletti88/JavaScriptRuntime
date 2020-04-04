@@ -1,4 +1,4 @@
-package com;
+package com.DataStructures;
 
 import com.Data.Data;
 import com.Util.StringHelpers;

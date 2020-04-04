@@ -32,6 +32,14 @@ public class Data {
         castAndAssignData(trimmedData);
     }
 
+    public Object getData(){
+        return data;
+    }
+
+    public DataTypes getType(){
+        return type;
+    }
+
     private void determineAndValidateType(String data) throws Exception{
         if (data.length() == 0){
             throw new Exception("Illegal empty data");
@@ -45,9 +53,8 @@ public class Data {
             validateNumber(data);
             this.type = DataTypes.Number;
         } else {
-            throw new Exception("Unknown com.Data.Data Type: " + data);
+            throw new Exception("Unknown Data Type: " + data);
         }
-
     }
 
     private void validateString(String pontentialStr) throws Exception{
@@ -63,7 +70,7 @@ public class Data {
     private void validateNumber(String potentialNumber) throws Exception{
         try {
             Double.parseDouble(potentialNumber);
-        }catch(Exception e){
+        } catch(Exception e) {
             throw new Exception("Invalid Number: " + potentialNumber);
         }
 
@@ -76,14 +83,8 @@ public class Data {
             this.data = Double.parseDouble(input);
         } else if(type == DataTypes.Boolean){
             this.data = input.equals("True");
+        } else if(type == DataTypes.Function){
+            this.data = input;
         }
-    }
-
-    public Object getData(){
-        return data;
-    }
-
-    public DataTypes getType(){
-        return type;
     }
 }

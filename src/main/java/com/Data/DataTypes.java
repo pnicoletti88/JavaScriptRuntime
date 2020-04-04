@@ -4,5 +4,6 @@ public enum DataTypes {
     String,
     Number,
     Undefined,
-    Boolean
+    Boolean,
+    Function
 }

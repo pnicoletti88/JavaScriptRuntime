@@ -1,7 +1,7 @@
 package com.Scopes;
 
 import com.Data.Data;
-import com.MemoryMap;
+import com.DataStructures.MemoryMap;
 
 public class StandardScope implements Scope {
     private Scope parent;
@@ -50,5 +50,15 @@ public class StandardScope implements Scope {
 
     public String serialize() {
         return memory.serialize();
+    }
+
+    public Scope findScope(String name) throws Exception{
+        if(memory.getVariable(name) != null){
+            return this;
+        } else if(parent != null){
+            return parent.findScope(name);
+        } else {
+            throw new Exception("Internal Error: " + name + " does not exist in a current scope");
+        }
     }
 }

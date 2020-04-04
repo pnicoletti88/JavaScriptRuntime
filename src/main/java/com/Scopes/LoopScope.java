@@ -1,7 +1,7 @@
 package com.Scopes;
 
 import com.Data.Data;
-import com.MemoryMap;
+import com.DataStructures.MemoryMap;
 
 public class LoopScope implements Scope{
     private MemoryMap loopConfigData = new MemoryMap();
@@ -44,6 +44,14 @@ public class LoopScope implements Scope{
             return loopConfig;
         }
         return loopBody.getVariable(name);
+    }
+
+    public Scope findScope(String name) throws Exception{
+        Data loopConfig = loopConfigData.getVariable(name);
+        if(loopConfig != null){
+            return this;
+        }
+        return loopBody.findScope(name);
     }
 
     public void loopDataInsertComplete(){
