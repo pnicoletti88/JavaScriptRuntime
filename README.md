@@ -8,12 +8,14 @@ Supported Features:
 - Mathematical operations: +, -, *, / for numbers and + for strings
 - Boolean operations: <, <=, ==, !=, >=, > for numbers. ==, != for strings. ==, !=, &&, || for booleans
 - For Loops: simple for loop fully supported
+- Functions: declare a function: function name(params){body}
 
 Features To Be Completed:
 - While loops
-- Functions (call stack to be created - will support recursion)
 - Conditionals (if, elif, else)
-- setTimeout (non-blockingwith event queue and callbacks)
+- setTimeout (non-blocking with event queue and callbacks)
 
-Most likely no other features beyond this will be implemented. Goal of project is to learn more about threading while implementing the non-blocking nature of javascript.
+Most likely no other features beyond this will be implemented. 
+Goal of project is to learn more about threading while implementing the non-blocking nature of javascript.
+
 
