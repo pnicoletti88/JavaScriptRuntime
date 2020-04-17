@@ -8,6 +8,7 @@ import com.Scopes.Scope;
 import com.Scopes.StandardScope;
 import com.Util.StringHelpers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Function {
@@ -35,8 +36,8 @@ public class Function {
 
     public Data executeFunction() throws Exception{
         insertParamsIntoScope();
-        String functionBody = parseFunctionBody(functionCode);
-        return (new Executor(functionBody, functionScope)).run();
+        String functionBody = StringHelpers.parseBlockBody(functionCode);
+        return (new Executor(functionBody, functionScope)).run().getData();
     }
 
     private void insertParamsIntoScope() throws Exception{
@@ -57,15 +58,9 @@ public class Function {
     private List<String> parseParams(String str) throws Exception{
         int[] bracketIndex = StringHelpers.findFirstAndLastBracketIndex(str,'(',')');
         String params = str.substring(bracketIndex[0]+1, bracketIndex[1]);
+        if(params.trim().equals("")){
+            return new ArrayList<>();
+        }
         return StringHelpers.quoteRespectingSplit(params, ',');
     }
-
-    // DRY!
-    private String parseFunctionBody(String code) throws Exception {
-        int[] indexes = StringHelpers.findFirstAndLastBracketIndex(code, '{', '}');
-        return code.substring(indexes[0] + 1, indexes[1]);
-    }
-
-
-
 }

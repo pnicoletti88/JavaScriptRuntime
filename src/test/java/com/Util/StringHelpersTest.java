@@ -81,4 +81,15 @@ public class StringHelpersTest {
         assertArrayEquals(expected, result.toArray());
     }
 
+    @Test
+    public void parsesBlockBody() throws Exception{
+        String code = "" +
+                "for(let i=0; i<5; i = i + 1){" +
+                "let x = 0;" +
+                " }";
+        String parsedBody = "let x = 0;";
+
+        assertEquals(StringHelpers.parseBlockBody(code), parsedBody);
+    }
+
 }
