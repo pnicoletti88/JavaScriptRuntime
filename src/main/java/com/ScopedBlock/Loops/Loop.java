@@ -1,4 +1,4 @@
-package com.SpecialBlock.Loops;
+package com.ScopedBlock.Loops;
 
 import com.CodeLine;
 import com.Data.Data;
@@ -7,10 +7,10 @@ import com.Data.DataTypes;
 import com.Executor;
 import com.Scopes.LoopScope;
 import com.Scopes.Scope;
-import com.SpecialBlock.SpecialBlockRunner;
+import com.ScopedBlock.ScopedBlockRunner;
 import com.Util.StringHelpers;
 
-public abstract class Loop implements SpecialBlockRunner {
+public abstract class Loop implements ScopedBlockRunner {
     private String loopDeclarationName;
     private String code;
     private LoopScope scope;
@@ -30,7 +30,7 @@ public abstract class Loop implements SpecialBlockRunner {
         if (!code.substring(0, loopDeclarationName.length()).equals(loopDeclarationName)) {
             throw new Exception("Internal loop error");
         }
-        for(int i=3;i<code.length();i++){
+        for(int i=loopDeclarationName.length();i<code.length();i++){
             if(code.charAt(i) == '('){
                 return;
             } else if(code.charAt(i) != ' '){

@@ -1,4 +1,4 @@
-package com.SpecialBlock.Loops;
+package com.ScopedBlock.Loops;
 
 import com.Scopes.StandardScope;
 import org.junit.Rule;
@@ -35,9 +35,8 @@ public class ForLoopTest {
 
         StandardScope scope = new StandardScope();
         String code = "for hi(let i=0; i<5; i = i + 1){}";
-        String[] parsedCommands = new String[]{"let i=0"," i<5", " i = i + 1"};
 
-        ForLoop testLoop = new ForLoop(code, scope);
+        new ForLoop(code, scope);
     }
 
     @Test
@@ -47,9 +46,8 @@ public class ForLoopTest {
 
         StandardScope scope = new StandardScope();
         String code = "for(;let i=0; i<5; i = i + 1){}";
-        String[] parsedCommands = new String[]{"let i=0"," i<5", " i = i + 1"};
 
-        ForLoop testLoop = new ForLoop(code, scope);
+        new ForLoop(code, scope);
     }
 
     @Test

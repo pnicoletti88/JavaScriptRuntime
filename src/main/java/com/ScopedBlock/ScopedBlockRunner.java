@@ -1,7 +1,7 @@
-package com.SpecialBlock;
+package com.ScopedBlock;
 
 import com.Data.DataReturnPacket;
 
-public interface SpecialBlockRunner {
+public interface ScopedBlockRunner {
     DataReturnPacket run() throws Exception;
 }

@@ -1,4 +1,4 @@
-package com.SpecialBlock.Loops;
+package com.ScopedBlock.Loops;
 
 import com.CodeLine;
 import com.Scopes.Scope;

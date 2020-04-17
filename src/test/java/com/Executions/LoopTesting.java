@@ -7,7 +7,7 @@ import static org.junit.Assert.assertEquals;
 
 public class LoopTesting {
     @Test
-    public void varibleInUpperScope() throws Exception {
+    public void variableInUpperScope() throws Exception {
         String expectedState = "" +
                 "i-10.0-Number\n";
         String code = "" +
@@ -72,6 +72,24 @@ public class LoopTesting {
                 "}" +
                 "" +
                 "let i=func();";
+
+        Execution exec = new Execution(code);
+        exec.start();
+        String state = exec.serializeState();
+        assertEquals(expectedState, state);
+    }
+
+    @Test
+    public void whileLoopRunsCorrectly() throws Exception {
+        String expectedState = "" +
+                "i-10.0-Number\n" +
+                "p-10.0-Number\n";
+        String code = "" +
+                "let i=0;" +
+                "let p = 10;" +
+                "while(i<p){" +
+                "i = i + 1;" +
+                "}";
 
         Execution exec = new Execution(code);
         exec.start();
