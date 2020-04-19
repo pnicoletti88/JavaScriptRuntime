@@ -1,6 +1,6 @@
-package com.Executions;
+package com.Processes;
 
-import com.Execution;
+import com.Process;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -16,7 +16,7 @@ public class LoopTesting {
                 "i=10;" +
                 "}";
 
-        Execution exec = new Execution(code);
+        Process exec = new Process(code);
         exec.start();
         String state = exec.serializeState();
         assertEquals(expectedState, state);
@@ -34,7 +34,7 @@ public class LoopTesting {
                 "i=j;" +
                 "}";
 
-        Execution exec = new Execution(code);
+        Process exec = new Process(code);
         exec.start();
         String state = exec.serializeState();
         assertEquals(expectedState, state);
@@ -52,7 +52,7 @@ public class LoopTesting {
                 "}" +
                 "}";
 
-        Execution exec = new Execution(code);
+        Process exec = new Process(code);
         exec.start();
         String state = exec.serializeState();
         assertEquals(expectedState, state);
@@ -73,7 +73,7 @@ public class LoopTesting {
                 "" +
                 "let i=func();";
 
-        Execution exec = new Execution(code);
+        Process exec = new Process(code);
         exec.start();
         String state = exec.serializeState();
         assertEquals(expectedState, state);
@@ -91,7 +91,7 @@ public class LoopTesting {
                 "i = i + 1;" +
                 "}";
 
-        Execution exec = new Execution(code);
+        Process exec = new Process(code);
         exec.start();
         String state = exec.serializeState();
         assertEquals(expectedState, state);

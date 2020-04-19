@@ -7,6 +7,7 @@ import com.ScopedBlock.ScopedBlockRunnerFactory;
 import com.Scopes.Scope;
 import com.ScopedBlock.ScopedBlockRunner;
 import com.ScopedBlock.ScopedBlockRunnerFactory.*;
+import com.SingleLineHandlers.CodeLine;
 import com.Util.StringHelpers;
 
 public class Executor {
@@ -26,13 +27,18 @@ public class Executor {
     public DataReturnPacket run() throws Exception {
         codeIndex = 0;
         currentExpression = new StringBuilder();
+        boolean isInQuotes = false;
 
         for (; codeIndex < code.length(); codeIndex++) {
             DataReturnPacket executionResult = null;
 
+            if (code.charAt(codeIndex) == '"') {
+                isInQuotes = !isInQuotes;
+            }
+
             addCharToCurrentExpression(code.charAt(codeIndex));
 
-            if(isAbleToEvaluateCurrentExpression()){
+            if(!isInQuotes && isAbleToEvaluateCurrentExpression()){
                 executionResult = evaluateCurrentExpression();
             }
 
@@ -44,8 +50,8 @@ public class Executor {
     }
 
     private void addCharToCurrentExpression(char c){
-        boolean isCharValid = currentExpression.length() > 0 || c != ' ';
-        if(isCharValid){
+        boolean isCharLeadingBlank = currentExpression.length() == 0 && c == ' ';
+        if(!isCharLeadingBlank){
             currentExpression.append(c);
         }
     }
@@ -90,33 +96,6 @@ public class Executor {
         return str.length() >= 7 && str.substring(0, 7).equals("return ");
     }
 
-    private int currentLineStartIndex() {
-        return codeIndex - currentExpression.length() + 1;
-    }
-
-    private DataReturnPacket buildAndRunBlockRunner(ScopedBlockRunnerTypes type) throws Exception {
-        String codeBlock = blockRunnerFactory.parseBlock(type, code, currentLineStartIndex());
-        codeIndex = currentLineStartIndex() + codeBlock.length();
-        ScopedBlockRunner loop = blockRunnerFactory.createSpecialBlockRunner(type, codeBlock, scope);
-        return loop.run();
-    }
-
-    private boolean isFunctionDeclaration(String str) {
-        return str.length() >= 9 && str.substring(0, 9).equals("function ");
-    }
-
-    private void declareFunction() throws Exception {
-        String codeBlock = findCodeBlockAndIncreaseCodeIndex();
-        Function.declareFunction(codeBlock, scope);
-    }
-
-    private String findCodeBlockAndIncreaseCodeIndex() throws Exception {
-        int blockEndIndex = StringHelpers.findFirstAndLastBracketIndex(code, '{', '}', codeIndex)[1];
-        String blockCode = code.substring(currentLineStartIndex(), blockEndIndex + 1).trim();
-        codeIndex = blockEndIndex;
-        return blockCode;
-    }
-
     private DataReturnPacket executeReturnStatement(String line) throws Exception {
         String standardLine = line.substring(7);
         Data runResult = runStandardLine(standardLine);
@@ -126,5 +105,27 @@ public class Executor {
     private Data runStandardLine(String line) throws Exception {
         CodeLine codeLine = new CodeLine(line, scope);
         return codeLine.runAndReturnResult();
+    }
+
+    private DataReturnPacket buildAndRunBlockRunner(ScopedBlockRunnerTypes type) throws Exception {
+        String codeBlock = blockRunnerFactory.parseBlock(type, code, currentLineStartIndex());
+        codeIndex = currentLineStartIndex() + codeBlock.length();
+        ScopedBlockRunner loop = blockRunnerFactory.createSpecialBlockRunner(type, codeBlock, scope);
+        return loop.run();
+    }
+
+    private int currentLineStartIndex() {
+        return codeIndex - currentExpression.length() + 1;
+    }
+
+    private boolean isFunctionDeclaration(String str) {
+        return str.length() >= 9 && str.substring(0, 9).equals("function ");
+    }
+
+    private void declareFunction() throws Exception {
+        int blockEndIndex = StringHelpers.findFirstAndLastBracketIndex(code, '{', '}', codeIndex)[1];
+        String codeBlock = code.substring(currentLineStartIndex(), blockEndIndex + 1).trim();
+        codeIndex = blockEndIndex;
+        Function.declareFunction(codeBlock, scope);
     }
 }

@@ -1,4 +1,4 @@
-package com;
+package com.Functions;
 
 import com.Data.Data;
 import com.Functions.Function;

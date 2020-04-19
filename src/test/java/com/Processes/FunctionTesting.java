@@ -1,6 +1,6 @@
-package com.Executions;
+package com.Processes;
 
-import com.Execution;
+import com.Process;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -14,7 +14,7 @@ public class FunctionTesting {
                 "function fun(){let x=1;}" +
                 "fun();";
 
-        Execution exec = new Execution(code);
+        Process exec = new Process(code);
         exec.start();
         String state = exec.serializeState();
         assertEquals(expectedState, state);
@@ -28,7 +28,7 @@ public class FunctionTesting {
                 "function fun(a,b){let x=1;}" +
                 "fun(1,2);";
 
-        Execution exec = new Execution(code);
+        Process exec = new Process(code);
         exec.start();
         String state = exec.serializeState();
         assertEquals(expectedState, state);
@@ -44,7 +44,7 @@ public class FunctionTesting {
                 "function fun(a,b){ x = x + a + b; }" +
                 "fun(1,2);";
 
-        Execution exec = new Execution(code);
+        Process exec = new Process(code);
         exec.start();
         String state = exec.serializeState();
         assertEquals(expectedState, state);
@@ -60,7 +60,36 @@ public class FunctionTesting {
                 "function fun(a,b){ return x + a + b; }" +
                 "x = fun(1,2);";
 
-        Execution exec = new Execution(code);
+        Process exec = new Process(code);
+        exec.start();
+        String state = exec.serializeState();
+        assertEquals(expectedState, state);
+    }
+
+    @Test
+    public void recursionWorks() throws Exception {
+        String expectedState = "" +
+                "fun-" +
+                "function fun(a){" +
+                "   if(a > 0){" +
+                "       let temp=a-1;" +
+                "       return fun(temp) + 1;" +
+                "   }" +
+                "   return 8;" +
+                "}" +
+                "-Function\n" +
+                "x-13.0-Number\n";
+        String code = "" +
+                "function fun(a){" +
+                "   if(a > 0){" +
+                "       let temp=a-1;" +
+                "       return fun(temp) + 1;" +
+                "   }" +
+                "   return 8;" +
+                "}" +
+                "let x = fun(5);";
+
+        Process exec = new Process(code);
         exec.start();
         String state = exec.serializeState();
         assertEquals(expectedState, state);

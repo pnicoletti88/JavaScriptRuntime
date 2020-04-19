@@ -1,4 +1,4 @@
-package com;
+package com.Data;
 
 import com.Data.Data;
 import com.Data.DataTypes;

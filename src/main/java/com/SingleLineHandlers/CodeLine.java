@@ -1,7 +1,7 @@
-package com;
+package com.SingleLineHandlers;
 
 import com.Data.Data;
-import com.Functions.Function;
+import com.Data.Operands;
 import com.Scopes.Scope;
 import com.Util.StringHelpers;
 
@@ -34,7 +34,7 @@ public class CodeLine {
     private Data performAssignment(String leftHandSide, String rightHandSide) throws Exception {
         String variableName = parseLeftHandSide(leftHandSide);
         Data result = parseRightHandSide(rightHandSide);
-        if(isDecleration(leftHandSide)){
+        if(isDeclaration(leftHandSide)){
             scope.createVariable(variableName, result);
         } else {
             scope.updateVariable(variableName, result);
@@ -43,39 +43,18 @@ public class CodeLine {
     }
 
     private String parseLeftHandSide(String leftHandSide){
-        if (isDecleration(leftHandSide)){
+        if (isDeclaration(leftHandSide)){
             return leftHandSide.replace("let ", "");
         }
         return leftHandSide;
     }
 
-    private boolean isDecleration(String leftSide){
+    private boolean isDeclaration(String leftSide){
         return leftSide.contains("let ");
     }
 
     private Data parseRightHandSide(String rightHandSide) throws Exception{
-        ArrayList<String> splitExpression = Operands.splitOnOperand(rightHandSide);
-        ArrayList<String> operands = Operands.parseOperands(rightHandSide);
-        Data[] dataItems = new Data[splitExpression.size()];
-        for(int i=0; i<splitExpression.size(); i++){
-            if(splitExpression.get(i).equals("")){
-                throw new Exception("Poorly formatted expression");
-            }
-            Element element = new Element(splitExpression.get(i).trim(), scope);
-            dataItems[i] = element.convertElementToData();
-        }
-        return evaluateExpression(Arrays.asList(dataItems), operands);
+        ExpressionEvaluator ex = new ExpressionEvaluator(rightHandSide, scope);
+        return ex.getResult();
     }
-
-    private Data evaluateExpression(List<Data> dataElements, List<String> operators) throws Exception{
-        if((dataElements.size() - operators.size()) != 1){
-            throw new Exception("Poorly formatted expression");
-        }
-        Data current = dataElements.get(0);
-        for(int i=1; i<dataElements.size(); i++){
-            current = Operands.evaluate(current, dataElements.get(i), operators.get(i-1));
-        }
-        return current;
-    }
-
 }

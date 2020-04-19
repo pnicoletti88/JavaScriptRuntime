@@ -1,11 +1,14 @@
-package com.Executions;
+package com.Processes;
 
-import com.Execution;
+import com.Process;
+import com.Scopes.StandardScope;
+import com.SingleLineHandlers.CodeLine;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
 
 public class DeclerationTesting {
     @Rule
@@ -16,7 +19,7 @@ public class DeclerationTesting {
         String expectedState = "i-10.0-Number\n";
         String code = "let i=10;";
 
-        Execution exec = new Execution(code);
+        Process exec = new Process(code);
         exec.start();
         String state = exec.serializeState();
         assertEquals(expectedState, state);
@@ -30,7 +33,7 @@ public class DeclerationTesting {
                 "j-14.0-Number\n";
         String code = "let i=10; let j=14; let f=4;";
 
-        Execution exec = new Execution(code);
+        Process exec = new Process(code);
         exec.start();
         String state = exec.serializeState();
         assertEquals(expectedState, state);
@@ -43,7 +46,7 @@ public class DeclerationTesting {
                 "j-5.0-Number\n";
         String code = "let i=10; let j=i; j=5;";
 
-        Execution exec = new Execution(code);
+        Process exec = new Process(code);
         exec.start();
         String state = exec.serializeState();
         assertEquals(expectedState, state);
@@ -54,7 +57,7 @@ public class DeclerationTesting {
         String expectedState = "i-apples-String\n";
         String code = "let i=\"apples\";";
 
-        Execution exec = new Execution(code);
+        Process exec = new Process(code);
         exec.start();
         String state = exec.serializeState();
         assertEquals(expectedState, state);
@@ -68,7 +71,7 @@ public class DeclerationTesting {
                 "j-bye-String\n";
         String code = "let i=\"hi\"; let j=\"bye\"; let f=\"wee\";";
 
-        Execution exec = new Execution(code);
+        Process exec = new Process(code);
         exec.start();
         String state = exec.serializeState();
         assertEquals(expectedState, state);
@@ -81,7 +84,7 @@ public class DeclerationTesting {
                 "j-wee-String\n";
         String code = "let i=\"hi\"; let j=i; j=\"wee\";";
 
-        Execution exec = new Execution(code);
+        Process exec = new Process(code);
         exec.start();
         String state = exec.serializeState();
         assertEquals(expectedState, state);
@@ -94,7 +97,18 @@ public class DeclerationTesting {
 
         String code = "let i=1a;";
 
-        Execution exec = new Execution(code);
+        Process exec = new Process(code);
         exec.start();
+    }
+
+    @Test
+    public void semiColonInString() throws Exception{
+        String expectedState = "i-hi;-String\n";
+        String code = "let i=\"hi;\";";
+
+        Process exec = new Process(code);
+        exec.start();
+        String state = exec.serializeState();
+        assertEquals(expectedState, state);
     }
 }

@@ -8,7 +8,7 @@ public class Main {
         String filePath = System.getProperty("user.dir") + "\\testFile.txt";
         String code = FileReader.convertTxtFileToString(filePath);
         String cleanedCode = StringHelpers.removeNewLines(code);
-        Execution exec = new Execution(cleanedCode);
+        Process exec = new Process(cleanedCode);
         exec.start();
         System.out.print(exec.serializeState());
     }

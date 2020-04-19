@@ -1,4 +1,4 @@
-package com;
+package com.SingleLineHandlers;
 
 import com.Data.Data;
 import com.Functions.Function;
@@ -14,18 +14,6 @@ public class Element {
         this.scope = scope;
     }
 
-    public Data convertElementToData() throws Exception{
-        if (isPrimitive()){
-            return new Data(element);
-        } else if(isFunctionCall()) {
-            Function func = new Function(element, scope);
-            return func.executeFunction();
-        } else {
-            Data currentData = scope.getVariable(element);
-            String currentDataString = currentData.getData().toString();
-            return new Data(currentDataString, currentData.getType());
-        }
-    }
 
     public boolean isPrimitive(){
         boolean isString = element.contains("\"");

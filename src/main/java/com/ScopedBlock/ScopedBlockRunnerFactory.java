@@ -1,11 +1,12 @@
 package com.ScopedBlock;
 
+import com.ScopedBlock.Conditionals.IfStatement;
 import com.Scopes.Scope;
 import com.ScopedBlock.Loops.ForLoop;
 import com.ScopedBlock.Loops.WhileLoop;
-import com.Util.StringHelpers;
-
 import java.util.HashMap;
+
+import static com.Util.StringHelpers.*;
 
 public class ScopedBlockRunnerFactory {
     private int maxPatternLength = 0;
@@ -55,14 +56,25 @@ public class ScopedBlockRunnerFactory {
             case WhileLoop:
                 return parseStandardBlock(code, startIndex);
             case ConditionalBlock:
-                //funky parse
+                return parseConditionalBlock(code, startIndex);
         }
-        return "";
+        throw new Exception("Internal Error");
     }
 
     private String parseStandardBlock(String code, int startIndex) throws Exception{
-        int blockEndIndex = StringHelpers.findFirstAndLastBracketIndex(code, '{', '}', startIndex)[1];
+        int blockEndIndex = findFirstAndLastBracketIndex(code, '{', '}', startIndex)[1];
         return code.substring(startIndex, blockEndIndex + 1).trim();
+    }
+
+    private String parseConditionalBlock(String code, int startIndex) throws Exception{
+        int currentBlockEndIndex = findFirstAndLastBracketIndex(code, '{', '}', startIndex)[1];
+        while(IfStatement.isElseIfStatement(code, currentBlockEndIndex + 1)){
+            currentBlockEndIndex = findFirstAndLastBracketIndex(code, '{', '}', currentBlockEndIndex + 1)[1];
+        }
+        if(IfStatement.isElseStatement(code, currentBlockEndIndex + 1)){
+            currentBlockEndIndex = findFirstAndLastBracketIndex(code, '{', '}', currentBlockEndIndex + 1)[1];
+        }
+        return code.substring(startIndex, currentBlockEndIndex + 1).trim();
     }
 
     public ScopedBlockRunner createSpecialBlockRunner(ScopedBlockRunnerTypes type, String codeBlock, Scope scope) throws Exception {
@@ -72,9 +84,8 @@ public class ScopedBlockRunnerFactory {
             case WhileLoop:
                 return new WhileLoop(codeBlock, scope);
             case ConditionalBlock:
-                return null;
+                return new IfStatement(codeBlock, scope);
         }
-        //temp
-        return null;
+        throw new Exception("Internal Error");
     }
 }

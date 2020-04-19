@@ -2,11 +2,11 @@ package com;
 
 import com.Scopes.StandardScope;
 
-public class Execution {
+public class Process {
     private String code;
     private StandardScope topLevelScope;
 
-    public Execution(String code) {
+    public Process(String code) {
         this.code = code;
         this.topLevelScope = new StandardScope();
     }

@@ -62,4 +62,7 @@ public class LoopScope implements Scope{
         loopBody = new StandardScope(parent);
     }
 
+    public String serialize(){
+        return loopConfigData.serialize() + loopBody.serialize();
+    }
 }

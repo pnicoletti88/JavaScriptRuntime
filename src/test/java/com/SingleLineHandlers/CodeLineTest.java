@@ -1,7 +1,8 @@
-package com;
+package com.SingleLineHandlers;
 
 import com.Data.Data;
 import com.Scopes.StandardScope;
+import com.SingleLineHandlers.CodeLine;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -106,18 +107,6 @@ public class CodeLineTest {
         exceptionRule.expectMessage("Poorly formatted expression");
 
         String code = "let i=+\"apple\"";
-        StandardScope scope = mock(StandardScope.class);
-
-        CodeLine testLine = new CodeLine(code, scope);
-        testLine.runAndReturnResult();
-    }
-
-    @Test
-    public void brokenSyntax3() throws Exception{
-        exceptionRule.expect(Exception.class);
-        exceptionRule.expectMessage("Invalid String: \"apple\"\"");
-
-        String code = "let i=\"apple\"\"";
         StandardScope scope = mock(StandardScope.class);
 
         CodeLine testLine = new CodeLine(code, scope);

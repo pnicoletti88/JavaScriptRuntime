@@ -10,7 +10,6 @@ public class Data {
         type = DataTypes.Undefined;
     }
 
-
     public Data(Double num){
         this.type = DataTypes.Number;
         data = num;

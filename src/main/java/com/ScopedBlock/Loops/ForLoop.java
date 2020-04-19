@@ -1,6 +1,6 @@
 package com.ScopedBlock.Loops;
 
-import com.CodeLine;
+import com.SingleLineHandlers.CodeLine;
 import com.Scopes.Scope;
 import com.Util.StringHelpers;
 

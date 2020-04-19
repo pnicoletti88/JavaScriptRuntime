@@ -113,9 +113,34 @@ public class StringHelpers {
         return output;
     }
 
-    public static String parseBlockBody(String code) throws Exception {
-        int[] indexes = findFirstAndLastBracketIndex(code, '{', '}');
+    public static String parseBlockBody(String code, int startIndex) throws Exception {
+        int[] indexes = findFirstAndLastBracketIndex(code, '{', '}', startIndex);
         return code.substring(indexes[0] + 1, indexes[1]).trim();
+    }
+
+    public static String parseBlockBody(String code) throws Exception {
+        return parseBlockBody(code, 0);
+    }
+
+    public static boolean isFirstWordInString(String pattern, String code, int startIndex){
+        StringBuilder seen = new StringBuilder();
+        int index = startIndex;
+        while(seen.length() < pattern.length() && index < code.length()){
+            if(seen.length() != 0 || code.charAt(index) != ' '){
+                seen.append(code.charAt(index));
+            }
+            index++;
+        }
+        return seen.toString().equals(pattern);
+    }
+
+    public static String findQuotedString(String s, int startIndex) throws Exception{
+        int firstIndex = s.indexOf('"', startIndex);
+        int endIndex = s.indexOf('"', firstIndex+1);
+        if(endIndex == -1){
+            throw new Exception("No valid quote range");
+        }
+        return s.substring(firstIndex, endIndex + 1);
     }
 }
 

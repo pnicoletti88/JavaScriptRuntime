@@ -1,6 +1,6 @@
 package com.ScopedBlock.Loops;
 
-import com.CodeLine;
+import com.SingleLineHandlers.CodeLine;
 import com.Data.Data;
 import com.Data.DataReturnPacket;
 import com.Data.DataTypes;
