@@ -80,7 +80,7 @@ public class CodeLineTest {
     @Test
     public void stringAndNumberAddition() throws Exception{
         exceptionRule.expect(Exception.class);
-        exceptionRule.expectMessage("Math can only be performed on the same type");
+        exceptionRule.expectMessage("Poorly formatted expression: \"apple\"+10");
 
         String code = "let i=\"apple\"+10";
         StandardScope scope = mock(StandardScope.class);
@@ -92,7 +92,7 @@ public class CodeLineTest {
     @Test
     public void brokenSyntax() throws Exception{
         exceptionRule.expect(Exception.class);
-        exceptionRule.expectMessage("Poorly formatted expression");
+        exceptionRule.expectMessage("Poorly formatted expression: \"apple\"+");
 
         String code = "let i=\"apple\"+";
         StandardScope scope = mock(StandardScope.class);

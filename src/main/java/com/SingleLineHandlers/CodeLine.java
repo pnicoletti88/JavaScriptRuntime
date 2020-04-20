@@ -1,12 +1,9 @@
 package com.SingleLineHandlers;
 
 import com.Data.Data;
-import com.Data.Operands;
 import com.Scopes.Scope;
 import com.Util.StringHelpers;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class CodeLine {

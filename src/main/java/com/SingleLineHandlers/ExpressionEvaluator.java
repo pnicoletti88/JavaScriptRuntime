@@ -1,30 +1,42 @@
 package com.SingleLineHandlers;
 
 import com.Data.Data;
-import com.Data.Operands;
+import com.DataStructures.ExpressionQueue;
+import com.Operands.Operand;
+import com.Operands.Operands;
 import com.Functions.Function;
 import com.Scopes.Scope;
 import com.Util.StringHelpers;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 public class ExpressionEvaluator {
     private String line;
     private Scope scope;
     private Data result;
-    private List<Data> splitExpression = new ArrayList<>();
-    private List<String> operands = new ArrayList<>();
+    private ExpressionQueue expQ = new ExpressionQueue();
     private StringBuilder currentChars = new StringBuilder();
     private int currentIndex = 0;
 
     ExpressionEvaluator(String line, Scope scope) throws Exception {
         this.line = line;
         this.scope = scope;
-        this.result = evaluate();
+        try {
+            this.result = evaluate();
+        } catch(Exception e){
+            throw new Exception("Poorly formatted expression: " + line);
+        }
     }
 
     private Data evaluate() throws Exception {
+        buildExpressionQueue();
+        return evaluateExpressionQueue();
+    }
+
+    public void buildExpressionQueue() throws Exception{
         for (; currentIndex < line.length(); currentIndex++) {
             if (line.charAt(currentIndex) == '"') {
                 addQuotedStringToCurrentChars();
@@ -37,9 +49,8 @@ public class ExpressionEvaluator {
             }
         }
         if (!currentChars.toString().trim().equals("")) {
-            splitExpression.add(stringToData(currentChars.toString().trim()));
+            expQ.add(stringToData(currentChars.toString().trim()));
         }
-        return evaluateExpression(splitExpression, operands);
     }
 
     private void addQuotedStringToCurrentChars() throws Exception{
@@ -61,11 +72,12 @@ public class ExpressionEvaluator {
 
     private void handleOperandAndCurrentChars() throws Exception{
         int operandLength = getOperandLength(line, currentIndex);
-        operands.add(line.substring(currentIndex, currentIndex + operandLength));
+        Operand op = Operands.operandFactory(line.substring(currentIndex, currentIndex + operandLength));
         currentIndex += operandLength - 1;
         if (!isStringBlank(currentChars)) {
-            splitExpression.add(stringToData(currentChars.toString().trim()));
+            expQ.add(stringToData(currentChars.toString().trim()));
         }
+        expQ.add(op);
         currentChars = new StringBuilder();
     }
 
@@ -114,7 +126,7 @@ public class ExpressionEvaluator {
             String bracketRegion = line.substring(bracketIndex[0] + 1, bracketIndex[1]);
             eval = new ExpressionEvaluator(bracketRegion, scope).getResult();
         }
-        splitExpression.add(eval);
+        expQ.add(eval);
         currentIndex = bracketIndex[1];
     }
 
@@ -122,14 +134,27 @@ public class ExpressionEvaluator {
         return !currentChars.toString().trim().equals("");
     }
 
-    private Data evaluateExpression(List<Data> dataElements, List<String> operators) throws Exception {
-        if ((dataElements.size() - operators.size()) != 1) {
-            throw new Exception("Poorly formatted expression");
-        }
-        Data current = dataElements.get(0);
-        // TODO order of ops
-        for (int i = 1; i < dataElements.size(); i++) {
-            current = Operands.evaluate(current, dataElements.get(i), operators.get(i - 1));
+    private Data evaluateExpressionQueue() throws Exception {
+        ExpressionQueue currentExpQ = expQ;
+        ExpressionQueue nextQAfterEvaluatingCurrentPriority = new ExpressionQueue();
+        Data current = null;
+        for(int priorityLevel=1; priorityLevel <= 3; priorityLevel++){
+            current = currentExpQ.pollData();
+
+            while(!currentExpQ.isEmpty()) {
+                Operand op = currentExpQ.pollOperand();
+                Data d = currentExpQ.pollData();
+                if(op.getPriority() == priorityLevel){
+                    current = Operands.evaluate(current, d, op);
+                } else {
+                    nextQAfterEvaluatingCurrentPriority.add(current);
+                    current = d;
+                    nextQAfterEvaluatingCurrentPriority.add(op);
+                }
+            }
+            nextQAfterEvaluatingCurrentPriority.add(current);
+            currentExpQ = nextQAfterEvaluatingCurrentPriority;
+            nextQAfterEvaluatingCurrentPriority = new ExpressionQueue();
         }
         return current;
     }

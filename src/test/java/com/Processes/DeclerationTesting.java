@@ -93,7 +93,7 @@ public class DeclerationTesting {
     @Test
     public void numberedVariableName() throws Exception {
         exceptionRule.expect(Exception.class);
-        exceptionRule.expectMessage("Invalid Number: 1a");
+        exceptionRule.expectMessage("Poorly formatted expression: 1a");
 
         String code = "let i=1a;";
 
