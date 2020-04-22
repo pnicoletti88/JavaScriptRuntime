@@ -1,5 +1,7 @@
 package com.Functions;
 
+import com.Exceptions.InternalErrorCodes;
+import com.Exceptions.InternalException;
 import com.SingleLineHandlers.CodeLine;
 import com.Data.Data;
 import com.Data.DataTypes;
@@ -56,7 +58,12 @@ public class Function {
     }
 
     private List<String> parseParams(String str) throws Exception{
-        int[] bracketIndex = StringHelpers.findFirstAndLastBracketIndex(str,'(',')');
+        int[] bracketIndex;
+        try {
+            bracketIndex = StringHelpers.findFirstAndLastBracketIndex(str, '(', ')');
+        } catch(InternalException e){
+            throw new InternalException(InternalErrorCodes.IMPROPER_RUN_FUNCTION_CALL);
+        }
         String params = str.substring(bracketIndex[0]+1, bracketIndex[1]);
         if(params.trim().equals("")){
             return new ArrayList<>();

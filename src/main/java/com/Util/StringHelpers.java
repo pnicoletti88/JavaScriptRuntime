@@ -1,5 +1,8 @@
 package com.Util;
 
+import com.Exceptions.InternalErrorCodes;
+import com.Exceptions.InternalException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,7 +51,7 @@ public class StringHelpers {
             index += 1;
         }
         if (firstIndex == -1 || endIndex == -1) {
-            throw new Exception("Brackets are poorly formatted");
+            throw new InternalException(InternalErrorCodes.STRING_PARSING_FAILURE);
         }
         return new int[]{firstIndex, endIndex};
     }
@@ -138,7 +141,7 @@ public class StringHelpers {
         int firstIndex = s.indexOf('"', startIndex);
         int endIndex = s.indexOf('"', firstIndex+1);
         if(endIndex == -1){
-            throw new Exception("No valid quote range");
+            throw new InternalException(InternalErrorCodes.STRING_PARSING_FAILURE);
         }
         return s.substring(firstIndex, endIndex + 1);
     }

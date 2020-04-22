@@ -2,6 +2,8 @@ package com.Scopes;
 
 import com.Data.Data;
 import com.DataStructures.MemoryMap;
+import com.Exceptions.InternalErrorCodes;
+import com.Exceptions.InternalException;
 
 public class StandardScope implements Scope {
     private Scope parent;
@@ -58,7 +60,7 @@ public class StandardScope implements Scope {
         } else if(parent != null){
             return parent.findScope(name);
         } else {
-            throw new Exception("Internal Error: " + name + " does not exist in a current scope");
+            throw new InternalException(InternalErrorCodes.UNKNOWN_VARIABLE);
         }
     }
 }

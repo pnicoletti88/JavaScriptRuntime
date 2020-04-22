@@ -1,13 +1,14 @@
 package com.Util;
 
+import com.Exceptions.InternalErrorCodes;
+import com.Exceptions.InternalException;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import java.util.List;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 public class StringHelpersTest {
 
@@ -43,12 +44,14 @@ public class StringHelpersTest {
 
     @Test
     public void bracketIndexNotValid() throws Exception{
-        exceptionRule.expect(Exception.class);
-        exceptionRule.expectMessage("Brackets are poorly formatted");
-
         String input = "hi my {fgb{}dfbvdfs{df}bfjkhk";
 
-        int[] result = StringHelpers.findFirstAndLastBracketIndex(input, '{','}');
+        try{
+            StringHelpers.findFirstAndLastBracketIndex(input, '{','}');
+            fail();
+        } catch(InternalException e){
+            assertEquals(InternalErrorCodes.STRING_PARSING_FAILURE, e.getCode());
+        }
     }
 
     @Test

@@ -1,50 +1,57 @@
 package com.ScopedBlock.Loops;
 
+import com.Exceptions.ExternalErrorCodes;
+import com.Exceptions.ExternalException;
+import com.Exceptions.InternalErrorCodes;
+import com.Exceptions.InternalException;
 import com.Scopes.StandardScope;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
-import static org.junit.Assert.assertArrayEquals;
+
+import static org.junit.Assert.*;
 
 
 public class WhileLoopTest {
 
-    @Rule
-    public ExpectedException exceptionRule = ExpectedException.none();
-
-
     @Test
     public void errorOnBadCommands1() throws Exception{
-        exceptionRule.expect(Exception.class);
-        exceptionRule.expectMessage("Invalid loop syntax");
-
         StandardScope scope = new StandardScope();
         String code = "while hi(i<j){}";
 
-        new WhileLoop(code, scope);
+        try {
+            new WhileLoop(code, scope);
+            fail();
+        } catch(Exception e){
+            assertTrue(e instanceof ExternalException);
+            assertEquals(((ExternalException)e).getCode(), ExternalErrorCodes.LOOP_ERROR);
+        }
     }
 
     @Test
     public void errorOnBadCommands2() throws Exception{
-        exceptionRule.expect(Exception.class);
-        exceptionRule.expectMessage("Illegal Loop Format");
-
         StandardScope scope = new StandardScope();
         String code = "while (i<j; j<i){}";
 
-        new WhileLoop(code, scope);
+        try {
+            new WhileLoop(code, scope);
+            fail();
+        } catch(Exception e){
+            assertTrue(e instanceof ExternalException);
+            assertEquals(((ExternalException)e).getCode(), ExternalErrorCodes.LOOP_ERROR);
+        }
     }
 
     @Test
     public void errorOnBadCommands3() throws Exception{
-        exceptionRule.expect(Exception.class);
-        exceptionRule.expectMessage("Illegal Loop Format");
-
         StandardScope scope = new StandardScope();
         String code = "while (){}";
 
-        new WhileLoop(code, scope);
+        try {
+            new WhileLoop(code, scope);
+            fail();
+        } catch(ExternalException e){
+            assertEquals(ExternalErrorCodes.LOOP_ERROR, e.getCode());
+        }
     }
 
 }

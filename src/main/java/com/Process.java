@@ -16,7 +16,6 @@ public class Process {
         (new Executor(code, topLevelScope)).run();
     }
 
-
     public String serializeState(){
         return topLevelScope.serialize();
     }

@@ -1,13 +1,13 @@
 package com.ScopedBlock.Loops;
 
+import com.Exceptions.ExternalErrorCodes;
+import com.Exceptions.ExternalException;
 import com.Scopes.StandardScope;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 
 public class ForLoopTest {
@@ -30,24 +30,25 @@ public class ForLoopTest {
 
     @Test
     public void errorOnBadCommands1() throws Exception{
-        exceptionRule.expect(Exception.class);
-        exceptionRule.expectMessage("Invalid loop syntax");
-
         StandardScope scope = new StandardScope();
         String code = "for hi(let i=0; i<5; i = i + 1){}";
-
-        new ForLoop(code, scope);
+        try{
+            new ForLoop(code, scope);
+        } catch(ExternalException e){
+            assertEquals(ExternalErrorCodes.LOOP_ERROR, e.getCode());
+        }
     }
 
     @Test
     public void errorOnBadCommands2() throws Exception{
-        exceptionRule.expect(Exception.class);
-        exceptionRule.expectMessage("Invalid loop syntax");
-
         StandardScope scope = new StandardScope();
         String code = "for(;let i=0; i<5; i = i + 1){}";
 
-        new ForLoop(code, scope);
+        try{
+            new ForLoop(code, scope);
+        } catch(ExternalException e){
+            assertEquals(ExternalErrorCodes.LOOP_ERROR, e.getCode());
+        }
     }
 
     @Test

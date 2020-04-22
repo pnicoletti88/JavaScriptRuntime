@@ -1,6 +1,8 @@
 package com.SingleLineHandlers;
 
 import com.Data.Data;
+import com.Exceptions.ExternalErrorCodes;
+import com.Exceptions.ExternalException;
 import com.Scopes.StandardScope;
 import com.SingleLineHandlers.CodeLine;
 import org.junit.Rule;
@@ -8,8 +10,8 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.mockito.ArgumentCaptor;
 
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
-import static org.junit.Assert.assertEquals;
 
 
 public class CodeLineTest {
@@ -79,38 +81,45 @@ public class CodeLineTest {
 
     @Test
     public void stringAndNumberAddition() throws Exception{
-        exceptionRule.expect(Exception.class);
-        exceptionRule.expectMessage("Poorly formatted expression: \"apple\"+10");
-
         String code = "let i=\"apple\"+10";
         StandardScope scope = mock(StandardScope.class);
 
-        CodeLine testLine = new CodeLine(code, scope);
-        testLine.runAndReturnResult();
+        try{
+            CodeLine testLine = new CodeLine(code, scope);
+            testLine.runAndReturnResult();
+            fail();
+        } catch(ExternalException e){
+            assertEquals(ExternalErrorCodes.TYPE_MISALIGNMENT, e.getCode());
+        }
+
     }
 
     @Test
     public void brokenSyntax() throws Exception{
-        exceptionRule.expect(Exception.class);
-        exceptionRule.expectMessage("Poorly formatted expression: \"apple\"+");
-
         String code = "let i=\"apple\"+";
         StandardScope scope = mock(StandardScope.class);
 
-        CodeLine testLine = new CodeLine(code, scope);
-        testLine.runAndReturnResult();
+        try {
+            CodeLine testLine = new CodeLine(code, scope);
+            testLine.runAndReturnResult();
+            fail();
+        } catch(ExternalException e){
+            assertEquals(ExternalErrorCodes.ILLEGAL_EXPRESSION, e.getCode());
+        }
     }
 
     @Test
     public void brokenSyntax2() throws Exception{
-        exceptionRule.expect(Exception.class);
-        exceptionRule.expectMessage("Poorly formatted expression");
-
         String code = "let i=+\"apple\"";
         StandardScope scope = mock(StandardScope.class);
 
-        CodeLine testLine = new CodeLine(code, scope);
-        testLine.runAndReturnResult();
+        try {
+            CodeLine testLine = new CodeLine(code, scope);
+            testLine.runAndReturnResult();
+            fail();
+        } catch(ExternalException e){
+            assertEquals(ExternalErrorCodes.ILLEGAL_EXPRESSION, e.getCode());
+        }
     }
 
     @Test

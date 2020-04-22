@@ -1,5 +1,7 @@
 package com.ScopedBlock.Loops;
 
+import com.Exceptions.ExternalErrorCodes;
+import com.Exceptions.ExternalException;
 import com.SingleLineHandlers.CodeLine;
 import com.Scopes.Scope;
 import com.Util.StringHelpers;
@@ -21,10 +23,9 @@ public class ForLoop extends Loop {
     }
 
     private void parseLoopConditions() throws Exception {
-        int[] indexes = StringHelpers.findFirstAndLastBracketIndex(super.getCode(), '(', ')');
-        String loopInstructions = super.getCode().substring(indexes[0] + 1, indexes[1]).trim();
+        String loopInstructions = getLoopInstructions();
         if(StringHelpers.characterCount(loopInstructions, ';') != 2){
-            throw new Exception("Invalid loop syntax");
+            throw new ExternalException(ExternalErrorCodes.LOOP_ERROR, loopInstructions);
         }
         parsedLoopCommands = StringHelpers.quoteRespectingSplit(loopInstructions, ';');
     }

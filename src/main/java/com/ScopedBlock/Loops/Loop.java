@@ -1,5 +1,9 @@
 package com.ScopedBlock.Loops;
 
+import com.Exceptions.ExternalErrorCodes;
+import com.Exceptions.ExternalException;
+import com.Exceptions.InternalErrorCodes;
+import com.Exceptions.InternalException;
 import com.SingleLineHandlers.CodeLine;
 import com.Data.Data;
 import com.Data.DataReturnPacket;
@@ -28,13 +32,14 @@ public abstract class Loop implements ScopedBlockRunner {
 
     private void validateLoopCall() throws Exception{
         if (!code.substring(0, loopDeclarationName.length()).equals(loopDeclarationName)) {
-            throw new Exception("Internal loop error");
+            throw new InternalException(InternalErrorCodes.INVALID_LOOP_CALL);
         }
         for(int i=loopDeclarationName.length();i<code.length();i++){
             if(code.charAt(i) == '('){
                 return;
             } else if(code.charAt(i) != ' '){
-                throw new Exception("Invalid loop syntax");
+                String expression = code.substring(0, i+1);
+                throw new ExternalException(ExternalErrorCodes.LOOP_ERROR, expression);
             }
         }
     }
@@ -52,6 +57,16 @@ public abstract class Loop implements ScopedBlockRunner {
 
     public String getCode() {
         return code;
+    }
+
+    public String getLoopInstructions() throws Exception{
+        try {
+            int[] indexes = StringHelpers.findFirstAndLastBracketIndex(getCode(), '(', ')');
+            return getCode().substring(indexes[0] + 1, indexes[1]).trim();
+        } catch (InternalException e){
+            throw new InternalException(InternalErrorCodes.INVALID_LOOP_CALL);
+        }
+
     }
 
     public void setRunCondition(CodeLine runCondition) {
@@ -86,7 +101,7 @@ public abstract class Loop implements ScopedBlockRunner {
 
         Data continueResult = runCondition.runAndReturnResult();
         if (continueResult.getType() != DataTypes.Boolean) {
-            throw new Exception("Loop condition must be a boolean");
+            throw new ExternalException(ExternalErrorCodes.TYPE_ERROR, "loop needs a boolean condition, received " + continueResult.getType().toString());
         }
         return (Boolean) continueResult.getData();
     }

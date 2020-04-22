@@ -1,5 +1,7 @@
 package com.Data;
 
+import com.Exceptions.ExternalErrorCodes;
+import com.Exceptions.ExternalException;
 import com.Util.StringHelpers;
 
 public class Data {
@@ -52,7 +54,7 @@ public class Data {
             validateNumber(data);
             this.type = DataTypes.Number;
         } else {
-            throw new Exception("Unknown Data Type: " + data);
+            throw new ExternalException(ExternalErrorCodes.UNKNOWN_PRIMITIVE_DATA, data);
         }
     }
 
@@ -62,7 +64,7 @@ public class Data {
         isValid = isValid && StringHelpers.characterCount(pontentialStr, '\"') == 2;
 
         if(!isValid){
-            throw new Exception("Invalid String: " + pontentialStr);
+            throw new ExternalException(ExternalErrorCodes.UNKNOWN_PRIMITIVE_DATA, pontentialStr);
         }
     }
 
@@ -70,7 +72,7 @@ public class Data {
         try {
             Double.parseDouble(potentialNumber);
         } catch(Exception e) {
-            throw new Exception("Invalid Number: " + potentialNumber);
+            throw new ExternalException(ExternalErrorCodes.UNKNOWN_PRIMITIVE_DATA, potentialNumber);
         }
 
     }

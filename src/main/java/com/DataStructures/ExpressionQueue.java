@@ -1,6 +1,8 @@
 package com.DataStructures;
 
 import com.Data.Data;
+import com.Exceptions.InternalErrorCodes;
+import com.Exceptions.InternalException;
 import com.Operands.Operand;
 
 import java.util.LinkedList;
@@ -12,17 +14,9 @@ public class ExpressionQueue {
     private Queue<Data> datas = new LinkedList<>();
     private boolean isDataNextToBeAdded = true;
 
-    public Queue<Operand> getOps() {
-        return ops;
-    }
-
-    public Queue<Data> getDatas() {
-        return datas;
-    }
-
     public void add(Operand op) throws Exception{
         if(isDataNextToBeAdded){
-            throw new Exception("Illegal Expression Queue Addition");
+            throw new InternalException(InternalErrorCodes.ILLEGAL_EXPRESSION_QUEUE_ADD);
         }
         ops.add(op);
         isDataNextToBeAdded = true;
@@ -30,7 +24,7 @@ public class ExpressionQueue {
 
     public void add(Data d) throws Exception{
         if(!isDataNextToBeAdded){
-            throw new Exception("Illegal Expression Queue Addition");
+            throw new InternalException(InternalErrorCodes.ILLEGAL_EXPRESSION_QUEUE_ADD);
         }
         datas.add(d);
         isDataNextToBeAdded = false;
@@ -38,16 +32,20 @@ public class ExpressionQueue {
 
     public Operand pollOperand() throws Exception{
         if(ops.size() != datas.size()){
-            throw new Exception("Illegal Expression Queue Operand Poll");
+            throw new InternalException(InternalErrorCodes.ILLEGAL_EXPRESSION_QUEUE_POLL);
         }
         return ops.poll();
     }
 
     public Data pollData() throws Exception{
         if(ops.size() == datas.size()){
-            throw new Exception("Illegal Expression Queue Operand Poll");
+            throw new InternalException(InternalErrorCodes.ILLEGAL_EXPRESSION_QUEUE_POLL);
         }
         return datas.poll();
+    }
+
+    public boolean isInValidStateForEvaluation(){
+        return datas.size() - 1 == ops.size();
     }
 
     public boolean isEmpty(){

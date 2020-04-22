@@ -2,6 +2,10 @@ package com.Operands;
 
 import com.Data.Data;
 import com.Data.DataTypes;
+import com.Exceptions.ExternalErrorCodes;
+import com.Exceptions.ExternalException;
+import com.Exceptions.InternalErrorCodes;
+import com.Exceptions.InternalException;
 
 import java.util.HashMap;
 
@@ -14,7 +18,7 @@ public class Operands {
             setOperandPriority();
         }
         if(!operandPriority.containsKey(op)){
-            throw new Exception("Invalid Operand");
+            throw new InternalException(InternalErrorCodes.UNRECOGNIZED_OPERAND);
         }
         return new Operand(operandPriority.get(op), op);
 
@@ -47,7 +51,8 @@ public class Operands {
 
     public static Data evaluate(Data a, Data b, Operand op) throws Exception {
         if (a.getType() != b.getType()) {
-            throw new Exception("Math can only be performed on the same type");
+            String expression = a.getType().toString() + op.getOperand() + a.getType().toString();
+            throw new ExternalException(ExternalErrorCodes.TYPE_MISALIGNMENT, expression);
         }
         if (a.getType() == DataTypes.Number) {
             return evaluateNumbers(a, b, op);
@@ -56,12 +61,12 @@ public class Operands {
         } else if (a.getType() == DataTypes.Boolean) {
             return evaluateBoolean(a, b, op);
         }
-        throw new Exception("Unknown Data Type To Evaluate");
+        throw new InternalException(InternalErrorCodes.UNREACHABLE_CODE);
     }
 
     private static Data evaluateNumbers(Data a, Data b, Operand op) throws Exception {
         if (a.getType() != DataTypes.Number || b.getType() != DataTypes.Number) {
-            throw new Exception("Internal Error: evaluating numbers");
+            throw new InternalException(InternalErrorCodes.TYPE_MISMATCH);
         }
         switch (op.getOperand()) {
             case "+":
@@ -84,23 +89,26 @@ public class Operands {
                 return new Data((Double) a.getData() < (Double) b.getData());
             case ">":
                 return new Data((Double) a.getData() > (Double) b.getData());
+            default:
+                String expression = "Number " + op.getOperand() + " Number";
+                throw new ExternalException(ExternalErrorCodes.UNSUPPORTED_OPERAND, expression);
         }
-        throw new Exception("Unknown Operand");
     }
 
     private static Data evaluateStrings(Data a, Data b, Operand op) throws Exception {
         if (a.getType() != DataTypes.String || b.getType() != DataTypes.String) {
-            throw new Exception("Internal Error: evaluating strings");
+            throw new InternalException(InternalErrorCodes.TYPE_MISMATCH);
         }
         if (!op.getOperand().equals("+")) {
-            throw new Exception("Error: can only add strings");
+            String expression = "String " + op.getOperand() + " String";
+            throw new ExternalException(ExternalErrorCodes.UNSUPPORTED_OPERAND, expression);
         }
         return new Data((String) a.getData() + (String) b.getData(), DataTypes.String);
     }
 
     private static Data evaluateBoolean(Data a, Data b, Operand op) throws Exception {
         if (a.getType() != DataTypes.Boolean || b.getType() != DataTypes.Boolean) {
-            throw new Exception("Internal Error: evaluating numbers");
+            throw new InternalException(InternalErrorCodes.TYPE_MISMATCH);
         }
         switch (op.getOperand()) {
             case "==":
@@ -111,7 +119,9 @@ public class Operands {
                 return new Data((Boolean) a.getData() && (Boolean) b.getData());
             case "||":
                 return new Data((Boolean) a.getData() || (Boolean) b.getData());
+            default:
+                String expression = "Boolean " + op.getOperand() + " Boolean";
+                throw new ExternalException(ExternalErrorCodes.UNSUPPORTED_OPERAND, expression);
         }
-        throw new Exception("Unknown Operand");
     }
 }

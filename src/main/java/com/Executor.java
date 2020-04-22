@@ -2,6 +2,9 @@ package com;
 
 import com.Data.Data;
 import com.Data.DataReturnPacket;
+import com.Exceptions.ExternalErrorCodes;
+import com.Exceptions.ExternalException;
+import com.Exceptions.InternalException;
 import com.Functions.Function;
 import com.ScopedBlock.ScopedBlockRunnerFactory;
 import com.Scopes.Scope;
@@ -38,7 +41,7 @@ public class Executor {
 
             addCharToCurrentExpression(code.charAt(codeIndex));
 
-            if(!isInQuotes && isAbleToEvaluateCurrentExpression()){
+            if (!isInQuotes && isAbleToEvaluateCurrentExpression()) {
                 executionResult = evaluateCurrentExpression();
             }
 
@@ -49,36 +52,40 @@ public class Executor {
         return new DataReturnPacket(new Data(), false);
     }
 
-    private void addCharToCurrentExpression(char c){
+    private void addCharToCurrentExpression(char c) {
         boolean isCharLeadingBlank = currentExpression.length() == 0 && c == ' ';
-        if(!isCharLeadingBlank){
+        if (!isCharLeadingBlank) {
             currentExpression.append(c);
         }
     }
 
-    private boolean isAbleToEvaluateCurrentExpression(){
+    private boolean isAbleToEvaluateCurrentExpression() {
         boolean result = isLastCharOfCurrentExpressionSemiColon();
         result = result || blockRunnerFactory.isSpecialBlockRunnerType(currentExpression.toString());
         result = result || isFunctionDeclaration(currentExpression.toString());
         return result;
     }
 
-    private boolean isLastCharOfCurrentExpressionSemiColon(){
-        return currentExpression.length() > 0 && currentExpression.charAt(currentExpression.length() -1) == ';';
+    private boolean isLastCharOfCurrentExpressionSemiColon() {
+        return currentExpression.length() > 0 && currentExpression.charAt(currentExpression.length() - 1) == ';';
     }
 
-    private DataReturnPacket evaluateCurrentExpression() throws Exception{
-        DataReturnPacket executionResult = null;
-        if (isLastCharOfCurrentExpressionSemiColon()) {
-            executionResult = runCurrentLine();
-        } else if (blockRunnerFactory.isSpecialBlockRunnerType(currentExpression.toString())) {
-            ScopedBlockRunnerTypes type = blockRunnerFactory.getType(currentExpression.toString());
-            executionResult = buildAndRunBlockRunner(type);
-        } else if (isFunctionDeclaration(currentExpression.toString())) {
-            declareFunction();
+    private DataReturnPacket evaluateCurrentExpression() throws Exception {
+        try {
+            DataReturnPacket executionResult = null;
+            if (isLastCharOfCurrentExpressionSemiColon()) {
+                executionResult = runCurrentLine();
+            } else if (blockRunnerFactory.isSpecialBlockRunnerType(currentExpression.toString())) {
+                ScopedBlockRunnerTypes type = blockRunnerFactory.getType(currentExpression.toString());
+                executionResult = buildAndRunBlockRunner(type);
+            } else if (isFunctionDeclaration(currentExpression.toString())) {
+                declareFunction();
+            }
+            currentExpression = new StringBuilder();
+            return executionResult;
+        } catch (InternalException e) {
+            throw new ExternalException(ExternalErrorCodes.INTERNAL_LANGUAGE_FAILURE);
         }
-        currentExpression = new StringBuilder();
-        return executionResult;
     }
 
     private DataReturnPacket runCurrentLine() throws Exception {
@@ -123,7 +130,14 @@ public class Executor {
     }
 
     private void declareFunction() throws Exception {
-        int blockEndIndex = StringHelpers.findFirstAndLastBracketIndex(code, '{', '}', codeIndex)[1];
+        int blockEndIndex;
+
+        try {
+            blockEndIndex = StringHelpers.findFirstAndLastBracketIndex(code, '{', '}', codeIndex)[1];
+        } catch (InternalException e) {
+            throw new ExternalException(ExternalErrorCodes.CURLY_BRACKET_MISALIGNMENT);
+        }
+
         String codeBlock = code.substring(currentLineStartIndex(), blockEndIndex + 1).trim();
         codeIndex = blockEndIndex;
         Function.declareFunction(codeBlock, scope);

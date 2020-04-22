@@ -1,6 +1,8 @@
 package com.SingleLineHandlers;
 
 import com.Data.Data;
+import com.Exceptions.ExternalErrorCodes;
+import com.Exceptions.ExternalException;
 import com.Scopes.Scope;
 import com.Util.StringHelpers;
 
@@ -18,7 +20,7 @@ public class CodeLine {
     public Data runAndReturnResult() throws Exception {
         List<Integer> equalsIndex = StringHelpers.singleEqualsIndexes(line);
         if(equalsIndex.size() > 1){
-            throw new Exception("Invalid Multiple Assignment");
+            throw new ExternalException(ExternalErrorCodes.ILLEGAL_EXPRESSION, "Multiple assignment on one line is not supported");
         } else if (equalsIndex.size() == 1){
             String lhs = line.substring(0, equalsIndex.get(0)).trim();
             String rhs = line.substring(equalsIndex.get(0) + 1).trim();

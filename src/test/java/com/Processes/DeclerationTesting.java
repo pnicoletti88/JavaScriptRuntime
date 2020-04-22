@@ -1,18 +1,14 @@
 package com.Processes;
 
+import com.Exceptions.ExternalErrorCodes;
+import com.Exceptions.ExternalException;
 import com.Process;
-import com.Scopes.StandardScope;
-import com.SingleLineHandlers.CodeLine;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
+import static org.junit.Assert.fail;
 
 public class DeclerationTesting {
-    @Rule
-    public ExpectedException exceptionRule = ExpectedException.none();
 
     @Test
     public void singleIntegerAllocation() throws Exception {
@@ -92,13 +88,15 @@ public class DeclerationTesting {
 
     @Test
     public void numberedVariableName() throws Exception {
-        exceptionRule.expect(Exception.class);
-        exceptionRule.expectMessage("Poorly formatted expression: 1a");
-
         String code = "let i=1a;";
 
-        Process exec = new Process(code);
-        exec.start();
+        try {
+            Process exec = new Process(code);
+            exec.start();
+            fail();
+        } catch(ExternalException e){
+            assertEquals(ExternalErrorCodes.UNKNOWN_PRIMITIVE_DATA, e.getCode());
+        }
     }
 
     @Test

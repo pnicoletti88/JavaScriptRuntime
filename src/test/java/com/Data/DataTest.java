@@ -1,7 +1,5 @@
 package com.Data;
 
-import com.Data.Data;
-import com.Data.DataTypes;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

@@ -1,5 +1,7 @@
 package com.ScopedBlock.Loops;
 
+import com.Exceptions.ExternalErrorCodes;
+import com.Exceptions.ExternalException;
 import com.SingleLineHandlers.CodeLine;
 import com.Scopes.Scope;
 import com.Util.StringHelpers;
@@ -9,19 +11,14 @@ public class WhileLoop extends Loop {
 
     public WhileLoop(String code, Scope scope) throws Exception{
         super(code, scope, "while");
-        loopCondition = parseLoopCondition();
+        loopCondition = getLoopInstructions();
         validateLoopCondition();
         activateLoopCondition();
     }
 
-    public String parseLoopCondition() throws Exception{
-        int[] indices = StringHelpers.findFirstAndLastBracketIndex(getCode(), '(', ')');
-        return getCode().substring(indices[0] + 1, indices[1]).trim();
-    }
-
     public void validateLoopCondition() throws Exception{
         if(loopCondition.trim().equals("") || StringHelpers.characterCount(loopCondition, ';') > 0){
-            throw new Exception("Illegal Loop Format");
+            throw new ExternalException(ExternalErrorCodes.LOOP_ERROR, loopCondition);
         }
     }
 

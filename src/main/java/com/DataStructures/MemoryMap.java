@@ -1,6 +1,8 @@
 package com.DataStructures;
 
 import com.Data.Data;
+import com.Exceptions.ExternalErrorCodes;
+import com.Exceptions.ExternalException;
 import com.Util.StringHelpers;
 
 import java.util.ArrayList;
@@ -15,14 +17,14 @@ public class MemoryMap {
 
     public void createVariable(String name, Data data) throws Exception{
         if(memory.containsKey(name)){
-            throw new Exception("Variable Redeclaration " + name);
+            throw new ExternalException(ExternalErrorCodes.UNDEFINED_VARIABLE, name);
         }
         memory.put(name, data);
     }
 
     public void updateVariable(String name, Data data) throws Exception{
         if(!memory.containsKey(name)){
-            throw new Exception("Undefined variable " + name);
+            throw new ExternalException(ExternalErrorCodes.VARIABLE_REDECLARATION, name);
         }
         memory.put(name, data);
     }

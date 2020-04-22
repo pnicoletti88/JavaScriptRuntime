@@ -2,16 +2,15 @@ package com.SingleLineHandlers;
 
 import com.Data.Data;
 import com.DataStructures.ExpressionQueue;
+import com.Exceptions.ExternalErrorCodes;
+import com.Exceptions.ExternalException;
+import com.Exceptions.InternalErrorCodes;
+import com.Exceptions.InternalException;
 import com.Operands.Operand;
 import com.Operands.Operands;
 import com.Functions.Function;
 import com.Scopes.Scope;
 import com.Util.StringHelpers;
-
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
 
 public class ExpressionEvaluator {
     private String line;
@@ -24,15 +23,18 @@ public class ExpressionEvaluator {
     ExpressionEvaluator(String line, Scope scope) throws Exception {
         this.line = line;
         this.scope = scope;
-        try {
-            this.result = evaluate();
-        } catch(Exception e){
-            throw new Exception("Poorly formatted expression: " + line);
-        }
+        this.result = evaluate();
     }
 
     private Data evaluate() throws Exception {
-        buildExpressionQueue();
+        try{
+            buildExpressionQueue();
+        } catch (InternalException e){
+            if(e.getCode() == InternalErrorCodes.ILLEGAL_EXPRESSION_QUEUE_ADD){
+                throw new ExternalException(ExternalErrorCodes.ILLEGAL_EXPRESSION);
+            }
+            throw e;
+        }
         return evaluateExpressionQueue();
     }
 
@@ -54,9 +56,13 @@ public class ExpressionEvaluator {
     }
 
     private void addQuotedStringToCurrentChars() throws Exception{
-        String s = StringHelpers.findQuotedString(line, currentIndex);
-        currentIndex += s.length() - 1;
-        currentChars.append(s);
+        try {
+            String s = StringHelpers.findQuotedString(line, currentIndex);
+            currentIndex += s.length() - 1;
+            currentChars.append(s);
+        } catch(InternalException e){
+            throw new ExternalException(ExternalErrorCodes.QUOTES_MISALIGNMENT);
+        }
     }
 
     private boolean isOperand(String s, int startIndex) {
@@ -74,7 +80,7 @@ public class ExpressionEvaluator {
         int operandLength = getOperandLength(line, currentIndex);
         Operand op = Operands.operandFactory(line.substring(currentIndex, currentIndex + operandLength));
         currentIndex += operandLength - 1;
-        if (!isStringBlank(currentChars)) {
+        if (!isStringBlank(currentChars.toString())) {
             expQ.add(stringToData(currentChars.toString().trim()));
         }
         expQ.add(op);
@@ -87,17 +93,17 @@ public class ExpressionEvaluator {
         } else if (Operands.isOperand(s.substring(startIndex, startIndex + 2))) {
             return 2;
         } else {
-            throw new Exception("Cannot get length of invalid operand");
+            throw new InternalException(InternalErrorCodes.UNRECOGNIZED_OPERAND);
         }
     }
 
-    public boolean isStringBlank(StringBuilder s) {
-        return s.toString().trim().equals("");
+    public boolean isStringBlank(String s) {
+        return s.trim().equals("");
     }
 
     public Data stringToData(String s) throws Exception {
-        if (s.equals("")) {
-            throw new Exception("Poorly formatted expression");
+        if (isStringBlank(s)) {
+            throw new ExternalException(ExternalErrorCodes.ILLEGAL_EXPRESSION, "invalid line: " + line);
         }
         if (isPrimitive(s)) {
             return new Data(s);
@@ -116,7 +122,12 @@ public class ExpressionEvaluator {
     }
 
     private void handleParenthesisOpening() throws Exception{
-        int[] bracketIndex = StringHelpers.findFirstAndLastBracketIndex(line, '(', ')', currentIndex);
+        int[] bracketIndex;
+        try {
+            bracketIndex = StringHelpers.findFirstAndLastBracketIndex(line, '(', ')', currentIndex);
+        } catch(InternalException e){
+            throw new ExternalException(ExternalErrorCodes.ILLEGAL_EXPRESSION, line);
+        }
         Data eval;
         if (currentCharsHasFunctionName()) {
             String funcCall = currentChars.toString().trim() + line.substring(bracketIndex[0], bracketIndex[1] + 1);
@@ -135,6 +146,9 @@ public class ExpressionEvaluator {
     }
 
     private Data evaluateExpressionQueue() throws Exception {
+        if(!expQ.isInValidStateForEvaluation()){
+            throw new ExternalException(ExternalErrorCodes.ILLEGAL_EXPRESSION, line);
+        }
         ExpressionQueue currentExpQ = expQ;
         ExpressionQueue nextQAfterEvaluatingCurrentPriority = new ExpressionQueue();
         Data current = null;
