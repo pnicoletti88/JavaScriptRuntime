@@ -5,5 +5,6 @@ public enum DataTypes {
     Number,
     Undefined,
     Boolean,
-    Function
+    Function,
+    BuiltInFunction
 }

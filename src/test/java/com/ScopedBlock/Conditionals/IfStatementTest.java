@@ -1,10 +1,12 @@
 package com.ScopedBlock.Conditionals;
 
+import com.Process;
 import com.Scopes.Scope;
 import com.Scopes.StandardScope;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
 
 public class IfStatementTest {
     @Test
@@ -16,7 +18,7 @@ public class IfStatementTest {
                 "}";
         String serialState = "i-10.0-Number\n";
 
-        IfStatement target = new IfStatement(code, parentScope);
+        IfStatement target = new IfStatement(code, parentScope, mock(Process.class));
         target.run();
         assertEquals(serialState, target.getScope().serialize());
     }
@@ -30,7 +32,7 @@ public class IfStatementTest {
                 "}";
         String serialState = "";
 
-        IfStatement target = new IfStatement(code, parentScope);
+        IfStatement target = new IfStatement(code, parentScope, mock(Process.class));
         target.run();
         assertEquals(serialState, target.getScope().serialize());
     }
@@ -46,7 +48,7 @@ public class IfStatementTest {
                 "}";
         String serialState = "i-6.0-Number\n";
 
-        IfStatement target = new IfStatement(code, parentScope);
+        IfStatement target = new IfStatement(code, parentScope, mock(Process.class));
         target.run();
         assertEquals(serialState, target.getScope().serialize());
     }
@@ -62,7 +64,7 @@ public class IfStatementTest {
                 "}";
         String serialState = "i-10.0-Number\n";
 
-        IfStatement target = new IfStatement(code, parentScope);
+        IfStatement target = new IfStatement(code, parentScope, mock(Process.class));
         target.run();
         assertEquals(serialState, target.getScope().serialize());
     }
@@ -80,7 +82,7 @@ public class IfStatementTest {
                 "}";
         String serialState = "i-6.0-Number\n";
 
-        IfStatement target = new IfStatement(code, parentScope);
+        IfStatement target = new IfStatement(code, parentScope, mock(Process.class));
         target.run();
         assertEquals(serialState, target.getScope().serialize());
     }

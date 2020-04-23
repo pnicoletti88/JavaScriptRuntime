@@ -2,13 +2,13 @@ package com.ScopedBlock.Loops;
 
 import com.Exceptions.ExternalErrorCodes;
 import com.Exceptions.ExternalException;
-import com.Exceptions.InternalErrorCodes;
-import com.Exceptions.InternalException;
+import com.Process;
 import com.Scopes.StandardScope;
 import org.junit.Test;
 
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
 
 
 public class WhileLoopTest {
@@ -19,7 +19,7 @@ public class WhileLoopTest {
         String code = "while hi(i<j){}";
 
         try {
-            new WhileLoop(code, scope);
+            new WhileLoop(code, scope, mock(Process.class));
             fail();
         } catch(Exception e){
             assertTrue(e instanceof ExternalException);
@@ -33,7 +33,7 @@ public class WhileLoopTest {
         String code = "while (i<j; j<i){}";
 
         try {
-            new WhileLoop(code, scope);
+            new WhileLoop(code, scope, mock(Process.class));
             fail();
         } catch(Exception e){
             assertTrue(e instanceof ExternalException);
@@ -47,7 +47,7 @@ public class WhileLoopTest {
         String code = "while (){}";
 
         try {
-            new WhileLoop(code, scope);
+            new WhileLoop(code, scope, mock(Process.class));
             fail();
         } catch(ExternalException e){
             assertEquals(ExternalErrorCodes.LOOP_ERROR, e.getCode());

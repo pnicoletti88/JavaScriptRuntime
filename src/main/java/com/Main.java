@@ -10,6 +10,5 @@ public class Main {
         String cleanedCode = StringHelpers.removeNewLines(code);
         Process exec = new Process(cleanedCode);
         exec.start();
-        System.out.print(exec.serializeState());
     }
 }

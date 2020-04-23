@@ -2,6 +2,8 @@ package com.Scopes;
 
 import com.Data.Data;
 import com.DataStructures.MemoryMap;
+import com.Exceptions.ExternalErrorCodes;
+import com.Exceptions.ExternalException;
 import com.Exceptions.InternalErrorCodes;
 import com.Exceptions.InternalException;
 
@@ -16,14 +18,13 @@ public class StandardScope implements Scope {
         this.parent = parent;
     }
 
-    public Data getVariable(String name) {
+    public Data getVariable(String name) throws Exception{
         Data value = memory.getVariable(name);
         if (value == null) {
             if(parent != null){
                 return parent.getVariable(name);
-            } else {
-                return new Data();
             }
+            throw new ExternalException(ExternalErrorCodes.UNDEFINED_VARIABLE);
         }
         return value;
     }
@@ -42,7 +43,7 @@ public class StandardScope implements Scope {
         } else if(parent != null){
             parent.updateVariable(name, data);
         } else {
-            throw new Exception("Undefined variable: " + name);
+            throw new ExternalException(ExternalErrorCodes.UNDEFINED_VARIABLE, name);
         }
     }
 

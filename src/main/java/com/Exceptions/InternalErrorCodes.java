@@ -12,7 +12,9 @@ public enum InternalErrorCodes {
     STRING_PARSING_FAILURE(8, "String parser could not perform as designed"),
     INVALID_BLOCK_CALL(9, "Cannot create code block from invalid block"),
     POORLY_FORMATTED_CONDITIONAL(10, "Invalid conditional block passed"),
-    IMPROPER_RUN_FUNCTION_CALL(11, "Cannot run invalid function");
+    IMPROPER_RUN_FUNCTION_CALL(11, "Cannot run invalid function"),
+    FAILED_TO_LOAD_BUILTIN_FUNCS(12, "Error loading built in functions"),
+    NEGATIVE_TASK_COUNT(13, "Error in the current task count");
 
     private final int code;
     private final String description;

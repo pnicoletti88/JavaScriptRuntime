@@ -5,12 +5,13 @@ import com.Exceptions.ExternalException;
 import com.SingleLineHandlers.CodeLine;
 import com.Scopes.Scope;
 import com.Util.StringHelpers;
+import com.Process;
 
 public class WhileLoop extends Loop {
     private String loopCondition;
 
-    public WhileLoop(String code, Scope scope) throws Exception{
-        super(code, scope, "while");
+    public WhileLoop(String code, Scope scope, Process process) throws Exception{
+        super(code, scope, "while", process);
         loopCondition = getLoopInstructions();
         validateLoopCondition();
         activateLoopCondition();
@@ -23,7 +24,7 @@ public class WhileLoop extends Loop {
     }
 
     public void activateLoopCondition(){
-        CodeLine loopCond = new CodeLine(loopCondition, super.getScope());
+        CodeLine loopCond = new CodeLine(loopCondition, super.getScope(), super.getProcess());
         super.setRunCondition(loopCond);
     }
 }

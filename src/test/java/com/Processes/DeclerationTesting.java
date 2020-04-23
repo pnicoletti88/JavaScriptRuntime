@@ -109,4 +109,30 @@ public class DeclerationTesting {
         String state = exec.serializeState();
         assertEquals(expectedState, state);
     }
+
+    @Test
+    public void undefinedVariable() throws Exception{
+        String code = "let i=j;";
+
+        try {
+            Process exec = new Process(code);
+            exec.start();
+            fail();
+        } catch(ExternalException e){
+            assertEquals(ExternalErrorCodes.UNDEFINED_VARIABLE, e.getCode());
+        }
+    }
+
+    @Test
+    public void reDefineVariable() throws Exception{
+        String code = "let i=1; let i=2;";
+
+        try {
+            Process exec = new Process(code);
+            exec.start();
+            fail();
+        } catch(ExternalException e){
+            assertEquals(ExternalErrorCodes.VARIABLE_REDECLARATION, e.getCode());
+        }
+    }
 }

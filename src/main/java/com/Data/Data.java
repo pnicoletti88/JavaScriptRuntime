@@ -1,5 +1,6 @@
 package com.Data;
 
+import com.Functions.BuiltInFunctions.BuiltInFunction;
 import com.Exceptions.ExternalErrorCodes;
 import com.Exceptions.ExternalException;
 import com.Util.StringHelpers;
@@ -31,6 +32,11 @@ public class Data {
         String trimmedData = data.trim();
         determineAndValidateType(trimmedData);
         castAndAssignData(trimmedData);
+    }
+
+    public Data(BuiltInFunction func){
+        this.type = DataTypes.BuiltInFunction;
+        this.data = func;
     }
 
     public Object getData(){

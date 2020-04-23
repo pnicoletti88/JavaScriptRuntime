@@ -5,6 +5,7 @@ import com.Exceptions.ExternalException;
 import com.SingleLineHandlers.CodeLine;
 import com.Scopes.Scope;
 import com.Util.StringHelpers;
+import com.Process;
 
 import java.util.List;
 
@@ -12,8 +13,8 @@ public class ForLoop extends Loop {
     private List<String> parsedLoopCommands;
 
 
-    public ForLoop(String code, Scope scope) throws Exception {
-        super(code, scope, "for");
+    public ForLoop(String code, Scope scope, Process process) throws Exception {
+        super(code, scope, "for", process);
         parseLoopConditions();
         activateLoopCommands();
     }
@@ -35,14 +36,14 @@ public class ForLoop extends Loop {
 
         CodeLine continueCondition;
         if(isNotBlank(parsedLoopCommands.get(1))) {
-            continueCondition = new CodeLine(parsedLoopCommands.get(1), super.getScope());
+            continueCondition = new CodeLine(parsedLoopCommands.get(1), super.getScope(), super.getProcess());
         } else {
-            continueCondition = new CodeLine("True", super.getScope());
+            continueCondition = new CodeLine("True", super.getScope(), super.getProcess());
         }
         super.setRunCondition(continueCondition);
 
         if(isNotBlank(parsedLoopCommands.get(2))){
-            CodeLine incrementCondition = new CodeLine(parsedLoopCommands.get(2), super.getScope());
+            CodeLine incrementCondition = new CodeLine(parsedLoopCommands.get(2), super.getScope(), super.getProcess());
             super.setIncrement(incrementCondition);
         }
     }
@@ -53,7 +54,7 @@ public class ForLoop extends Loop {
 
     private void performSetUpOperation(String op) throws Exception {
         if (isNotBlank(op)) {
-            (new CodeLine(op, super.getScope())).runAndReturnResult();
+            (new CodeLine(op, super.getScope(), super.getProcess())).runAndReturnResult();
         }
         getScope().loopDataInsertComplete();
     }

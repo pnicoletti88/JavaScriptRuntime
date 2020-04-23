@@ -38,7 +38,7 @@ public class LoopScope implements Scope{
         }
     }
 
-    public Data getVariable(String name){
+    public Data getVariable(String name) throws Exception{
         Data loopConfig = loopConfigData.getVariable(name);
         if(loopConfig != null){
             return loopConfig;

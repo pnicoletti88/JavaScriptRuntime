@@ -11,6 +11,7 @@ import com.Operands.Operands;
 import com.Functions.Function;
 import com.Scopes.Scope;
 import com.Util.StringHelpers;
+import com.Process;
 
 public class ExpressionEvaluator {
     private String line;
@@ -19,10 +20,12 @@ public class ExpressionEvaluator {
     private ExpressionQueue expQ = new ExpressionQueue();
     private StringBuilder currentChars = new StringBuilder();
     private int currentIndex = 0;
+    private Process process;
 
-    ExpressionEvaluator(String line, Scope scope) throws Exception {
+    ExpressionEvaluator(String line, Scope scope, Process process) throws Exception {
         this.line = line;
         this.scope = scope;
+        this.process = process;
         this.result = evaluate();
     }
 
@@ -132,10 +135,10 @@ public class ExpressionEvaluator {
         if (currentCharsHasFunctionName()) {
             String funcCall = currentChars.toString().trim() + line.substring(bracketIndex[0], bracketIndex[1] + 1);
             currentChars = new StringBuilder();
-            eval = new Function(funcCall, scope).executeFunction();
+            eval = new Function(funcCall, scope, process).executeFunction();
         } else {
             String bracketRegion = line.substring(bracketIndex[0] + 1, bracketIndex[1]);
-            eval = new ExpressionEvaluator(bracketRegion, scope).getResult();
+            eval = new ExpressionEvaluator(bracketRegion, scope, process).getResult();
         }
         expQ.add(eval);
         currentIndex = bracketIndex[1];

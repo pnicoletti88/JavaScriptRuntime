@@ -11,7 +11,9 @@ public enum ExternalErrorCodes {
     ILLEGAL_EXPRESSION(7, "Expression does not meet syntax requirements", "specifically, "),
     INTERNAL_LANGUAGE_FAILURE(8, "Something went wrong, please open a issue with your code snippet"),
     CURLY_BRACKET_MISALIGNMENT(9, "Brackets are poorly formatted in code"),
-    QUOTES_MISALIGNMENT(10, "quotes do not close");
+    QUOTES_MISALIGNMENT(10, "quotes do not close"),
+    FUNCTION_CALL_ON_NON_FUNCTION(11, "call name: "),
+    ILLEGAL_ARGUMENT(12, "function name: ");
 
     private final int code;
     private final String description;

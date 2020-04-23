@@ -18,13 +18,15 @@ public class Executor {
     private Scope scope;
     private int codeIndex;
     private StringBuilder currentExpression;
+    private Process process;
 
     private static final DataReturnPacket defaultDataReturnPack = new DataReturnPacket();
     private static final ScopedBlockRunnerFactory blockRunnerFactory = new ScopedBlockRunnerFactory();
 
-    public Executor(String code, Scope scope) {
+    public Executor(String code, Scope scope, Process process) {
         this.code = code;
         this.scope = scope;
+        this.process = process;
     }
 
     public DataReturnPacket run() throws Exception {
@@ -110,14 +112,14 @@ public class Executor {
     }
 
     private Data runStandardLine(String line) throws Exception {
-        CodeLine codeLine = new CodeLine(line, scope);
+        CodeLine codeLine = new CodeLine(line, scope, process);
         return codeLine.runAndReturnResult();
     }
 
     private DataReturnPacket buildAndRunBlockRunner(ScopedBlockRunnerTypes type) throws Exception {
         String codeBlock = blockRunnerFactory.parseBlock(type, code, currentLineStartIndex());
         codeIndex = currentLineStartIndex() + codeBlock.length();
-        ScopedBlockRunner loop = blockRunnerFactory.createSpecialBlockRunner(type, codeBlock, scope);
+        ScopedBlockRunner loop = blockRunnerFactory.createSpecialBlockRunner(type, codeBlock, scope, process);
         return loop.run();
     }
 

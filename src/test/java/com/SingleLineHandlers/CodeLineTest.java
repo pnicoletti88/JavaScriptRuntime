@@ -3,6 +3,7 @@ package com.SingleLineHandlers;
 import com.Data.Data;
 import com.Exceptions.ExternalErrorCodes;
 import com.Exceptions.ExternalException;
+import com.Process;
 import com.Scopes.StandardScope;
 import com.SingleLineHandlers.CodeLine;
 import org.junit.Rule;
@@ -26,7 +27,7 @@ public class CodeLineTest {
         ArgumentCaptor<Data> argData = ArgumentCaptor.forClass(Data.class);
         ArgumentCaptor<String> argString = ArgumentCaptor.forClass(String.class);
 
-        CodeLine testLine = new CodeLine(code, scope);
+        CodeLine testLine = new CodeLine(code, scope, mock(Process.class));
         testLine.runAndReturnResult();
 
         verify(scope).createVariable(argString.capture(), argData.capture());
@@ -41,7 +42,7 @@ public class CodeLineTest {
         ArgumentCaptor<Data> argData = ArgumentCaptor.forClass(Data.class);
         ArgumentCaptor<String> argString = ArgumentCaptor.forClass(String.class);
 
-        CodeLine testLine = new CodeLine(code, scope);
+        CodeLine testLine = new CodeLine(code, scope, mock(Process.class));
         testLine.runAndReturnResult();
 
         verify(scope).createVariable(argString.capture(), argData.capture());
@@ -56,7 +57,7 @@ public class CodeLineTest {
         ArgumentCaptor<Data> argData = ArgumentCaptor.forClass(Data.class);
         ArgumentCaptor<String> argString = ArgumentCaptor.forClass(String.class);
 
-        CodeLine testLine = new CodeLine(code, scope);
+        CodeLine testLine = new CodeLine(code, scope, mock(Process.class));
         testLine.runAndReturnResult();
 
         verify(scope).createVariable(argString.capture(), argData.capture());
@@ -71,7 +72,7 @@ public class CodeLineTest {
         ArgumentCaptor<Data> argData = ArgumentCaptor.forClass(Data.class);
         ArgumentCaptor<String> argString = ArgumentCaptor.forClass(String.class);
 
-        CodeLine testLine = new CodeLine(code, scope);
+        CodeLine testLine = new CodeLine(code, scope, mock(Process.class));
         testLine.runAndReturnResult();
 
         verify(scope).createVariable(argString.capture(), argData.capture());
@@ -85,7 +86,7 @@ public class CodeLineTest {
         StandardScope scope = mock(StandardScope.class);
 
         try{
-            CodeLine testLine = new CodeLine(code, scope);
+            CodeLine testLine = new CodeLine(code, scope, mock(Process.class));
             testLine.runAndReturnResult();
             fail();
         } catch(ExternalException e){
@@ -100,7 +101,7 @@ public class CodeLineTest {
         StandardScope scope = mock(StandardScope.class);
 
         try {
-            CodeLine testLine = new CodeLine(code, scope);
+            CodeLine testLine = new CodeLine(code, scope, mock(Process.class));
             testLine.runAndReturnResult();
             fail();
         } catch(ExternalException e){
@@ -114,7 +115,7 @@ public class CodeLineTest {
         StandardScope scope = mock(StandardScope.class);
 
         try {
-            CodeLine testLine = new CodeLine(code, scope);
+            CodeLine testLine = new CodeLine(code, scope, mock(Process.class));
             testLine.runAndReturnResult();
             fail();
         } catch(ExternalException e){
@@ -129,7 +130,7 @@ public class CodeLineTest {
         ArgumentCaptor<Data> argData = ArgumentCaptor.forClass(Data.class);
         ArgumentCaptor<String> argString = ArgumentCaptor.forClass(String.class);
 
-        CodeLine testLine = new CodeLine(code, scope);
+        CodeLine testLine = new CodeLine(code, scope, mock(Process.class));
         testLine.runAndReturnResult();
 
         verify(scope).createVariable(argString.capture(), argData.capture());
@@ -144,7 +145,7 @@ public class CodeLineTest {
         ArgumentCaptor<Data> argData = ArgumentCaptor.forClass(Data.class);
         ArgumentCaptor<String> argString = ArgumentCaptor.forClass(String.class);
 
-        CodeLine testLine = new CodeLine(code, scope);
+        CodeLine testLine = new CodeLine(code, scope, mock(Process.class));
         testLine.runAndReturnResult();
 
         verify(scope).createVariable(argString.capture(), argData.capture());
@@ -159,7 +160,7 @@ public class CodeLineTest {
         ArgumentCaptor<Data> argData = ArgumentCaptor.forClass(Data.class);
         ArgumentCaptor<String> argString = ArgumentCaptor.forClass(String.class);
 
-        CodeLine testLine = new CodeLine(code, scope);
+        CodeLine testLine = new CodeLine(code, scope, mock(Process.class));
         testLine.runAndReturnResult();
 
         verify(scope).createVariable(argString.capture(), argData.capture());
@@ -174,7 +175,7 @@ public class CodeLineTest {
         ArgumentCaptor<Data> argData = ArgumentCaptor.forClass(Data.class);
         ArgumentCaptor<String> argString = ArgumentCaptor.forClass(String.class);
 
-        CodeLine testLine = new CodeLine(code, scope);
+        CodeLine testLine = new CodeLine(code, scope, mock(Process.class));
         testLine.runAndReturnResult();
 
         verify(scope).createVariable(argString.capture(), argData.capture());
@@ -189,7 +190,7 @@ public class CodeLineTest {
         ArgumentCaptor<Data> argData = ArgumentCaptor.forClass(Data.class);
         ArgumentCaptor<String> argString = ArgumentCaptor.forClass(String.class);
 
-        CodeLine testLine = new CodeLine(code, scope);
+        CodeLine testLine = new CodeLine(code, scope, mock(Process.class));
         testLine.runAndReturnResult();
 
         verify(scope).createVariable(argString.capture(), argData.capture());
@@ -203,7 +204,7 @@ public class CodeLineTest {
         ArgumentCaptor<Data> argData = ArgumentCaptor.forClass(Data.class);
         ArgumentCaptor<String> argString = ArgumentCaptor.forClass(String.class);
 
-        CodeLine testLine = new CodeLine(code, scope);
+        CodeLine testLine = new CodeLine(code, scope, mock(Process.class));
         testLine.runAndReturnResult();
 
         verify(scope).createVariable(argString.capture(), argData.capture());

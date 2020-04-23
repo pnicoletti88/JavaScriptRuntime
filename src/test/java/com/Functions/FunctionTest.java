@@ -1,7 +1,6 @@
 package com.Functions;
 
 import com.Data.Data;
-import com.Functions.Function;
 import com.Scopes.StandardScope;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;

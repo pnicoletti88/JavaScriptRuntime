@@ -2,10 +2,12 @@ package com.ScopedBlock.Loops;
 
 import com.Exceptions.ExternalErrorCodes;
 import com.Exceptions.ExternalException;
+import com.Process;
 import com.Scopes.StandardScope;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import static org.mockito.Mockito.mock;
 
 import static org.junit.Assert.*;
 
@@ -24,7 +26,7 @@ public class ForLoopTest {
                 "}";
         String[] parsedCommands = new String[]{"let i=0"," i<5", " i = i + 1"};
 
-        ForLoop testLoop = new ForLoop(code, scope);
+        ForLoop testLoop = new ForLoop(code, scope, mock(Process.class));
         assertArrayEquals(parsedCommands, testLoop.getParsedLoopCommands().toArray());
     }
 
@@ -33,7 +35,7 @@ public class ForLoopTest {
         StandardScope scope = new StandardScope();
         String code = "for hi(let i=0; i<5; i = i + 1){}";
         try{
-            new ForLoop(code, scope);
+            new ForLoop(code, scope, mock(Process.class));
         } catch(ExternalException e){
             assertEquals(ExternalErrorCodes.LOOP_ERROR, e.getCode());
         }
@@ -45,7 +47,7 @@ public class ForLoopTest {
         String code = "for(;let i=0; i<5; i = i + 1){}";
 
         try{
-            new ForLoop(code, scope);
+            new ForLoop(code, scope, mock(Process.class));
         } catch(ExternalException e){
             assertEquals(ExternalErrorCodes.LOOP_ERROR, e.getCode());
         }
@@ -58,7 +60,7 @@ public class ForLoopTest {
                 "for(let i=0; i<5; i = i + 1){" +
                 "let x = 0;" +
                 "}";
-        Loop testLoop = new ForLoop(code, scope);
+        Loop testLoop = new ForLoop(code, scope, mock(Process.class));
         testLoop.run();
     }
 
@@ -70,7 +72,7 @@ public class ForLoopTest {
                 "let x = 0;" +
                 "i = i + 1;" +
                 "}";
-        Loop testLoop = new ForLoop(code, scope);
+        Loop testLoop = new ForLoop(code, scope, mock(Process.class));
         testLoop.run();
     }
 }

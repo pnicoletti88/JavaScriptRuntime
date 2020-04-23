@@ -1,6 +1,7 @@
 package com.DataStructures;
 
 import com.Data.Data;
+import com.Data.DataTypes;
 import com.Exceptions.ExternalErrorCodes;
 import com.Exceptions.ExternalException;
 import com.Util.StringHelpers;
@@ -17,14 +18,14 @@ public class MemoryMap {
 
     public void createVariable(String name, Data data) throws Exception{
         if(memory.containsKey(name)){
-            throw new ExternalException(ExternalErrorCodes.UNDEFINED_VARIABLE, name);
+            throw new ExternalException(ExternalErrorCodes.VARIABLE_REDECLARATION, name);
         }
         memory.put(name, data);
     }
 
     public void updateVariable(String name, Data data) throws Exception{
         if(!memory.containsKey(name)){
-            throw new ExternalException(ExternalErrorCodes.VARIABLE_REDECLARATION, name);
+            throw new ExternalException(ExternalErrorCodes.UNDEFINED_VARIABLE, name);
         }
         memory.put(name, data);
     }
@@ -32,8 +33,10 @@ public class MemoryMap {
     public String serialize(){
         ArrayList<String> data = new ArrayList<>();
         for(String key:memory.keySet()){
-            String item = key + "-" + memory.get(key).getData().toString() + "-" + memory.get(key).getType();
-            data.add(item);
+            if(memory.get(key).getType() != DataTypes.BuiltInFunction){
+                String item = key + "-" + memory.get(key).getData().toString() + "-" + memory.get(key).getType();
+                data.add(item);
+            }
         }
         data.sort(String::compareTo);
         return StringHelpers.joinString(data);

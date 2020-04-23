@@ -5,14 +5,17 @@ import com.Exceptions.ExternalErrorCodes;
 import com.Exceptions.ExternalException;
 import com.Scopes.Scope;
 import com.Util.StringHelpers;
+import com.Process;
 
 import java.util.List;
 
 public class CodeLine {
     private String line;
     private Scope scope;
+    private Process process;
 
-    public CodeLine(String line, Scope scope){
+    public CodeLine(String line, Scope scope, Process process){
+        this.process = process;
         this.line = line;
         this.scope = scope;
     }
@@ -53,7 +56,7 @@ public class CodeLine {
     }
 
     private Data parseRightHandSide(String rightHandSide) throws Exception{
-        ExpressionEvaluator ex = new ExpressionEvaluator(rightHandSide, scope);
+        ExpressionEvaluator ex = new ExpressionEvaluator(rightHandSide, scope, process);
         return ex.getResult();
     }
 }

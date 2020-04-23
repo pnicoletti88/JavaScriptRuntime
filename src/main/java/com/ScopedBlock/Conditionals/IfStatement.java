@@ -13,6 +13,7 @@ import com.ScopedBlock.ScopedBlockRunner;
 import com.Scopes.Scope;
 import com.Scopes.StandardScope;
 import com.Util.StringHelpers;
+import com.Process;
 
 import static com.Util.StringHelpers.isFirstWordInString;
 
@@ -20,9 +21,11 @@ public class IfStatement implements ScopedBlockRunner {
     private String code;
     private Scope scope;
     private int codeIndex = 0;
+    private Process process;
 
-    public IfStatement(String code, Scope parentScope) {
+    public IfStatement(String code, Scope parentScope, Process process) {
         this.code = code;
+        this.process = process;
         scope = new StandardScope(parentScope);
     }
 
@@ -51,7 +54,7 @@ public class IfStatement implements ScopedBlockRunner {
     public DataReturnPacket run() throws Exception {
         String codeToRun = findCodeBlockToRun();
         if (codeToRun != null) {
-            return (new Executor(codeToRun, scope)).run();
+            return (new Executor(codeToRun, scope, process)).run();
         }
         return new DataReturnPacket();
     }
@@ -99,7 +102,7 @@ public class IfStatement implements ScopedBlockRunner {
         } catch (Exception e) {
             throw new InternalException(InternalErrorCodes.POORLY_FORMATTED_CONDITIONAL);
         }
-        CodeLine expression = new CodeLine(code.substring(bracketIndex[0] + 1, bracketIndex[1]), scope);
+        CodeLine expression = new CodeLine(code.substring(bracketIndex[0] + 1, bracketIndex[1]), scope, process);
         Data result = expression.runAndReturnResult();
         return isDataTrue(result);
     }

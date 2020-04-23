@@ -4,6 +4,7 @@ import com.Exceptions.ExternalErrorCodes;
 import com.Exceptions.ExternalException;
 import com.Exceptions.InternalErrorCodes;
 import com.Exceptions.InternalException;
+import com.Process;
 import com.SingleLineHandlers.CodeLine;
 import com.Data.Data;
 import com.Data.DataReturnPacket;
@@ -21,9 +22,11 @@ public abstract class Loop implements ScopedBlockRunner {
     private CodeLine runCondition;
     private CodeLine increment;
     private Executor interiorCodeBlock;
+    private Process process;
 
-    public Loop(String code, Scope parentScope, String loopName) throws Exception {
+    public Loop(String code, Scope parentScope, String loopName, Process process) throws Exception {
         this.code = code.trim();
+        this.process = process;
         scope = new LoopScope(parentScope);
         loopDeclarationName = loopName;
         validateLoopCall();
@@ -46,14 +49,17 @@ public abstract class Loop implements ScopedBlockRunner {
 
     private void loadInteriorCodeBlock() throws Exception {
         String loopBody =  StringHelpers.parseBlockBody(code);
-        Executor interiorCodeBlock = new Executor(loopBody, scope);
+        Executor interiorCodeBlock = new Executor(loopBody, scope, process);
         setInteriorCodeBlock(interiorCodeBlock);
+    }
+
+    public Process getProcess() {
+        return process;
     }
 
     public LoopScope getScope() {
         return scope;
     }
-
 
     public String getCode() {
         return code;

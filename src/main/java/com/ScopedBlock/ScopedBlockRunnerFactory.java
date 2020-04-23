@@ -6,6 +6,7 @@ import com.ScopedBlock.Conditionals.IfStatement;
 import com.Scopes.Scope;
 import com.ScopedBlock.Loops.ForLoop;
 import com.ScopedBlock.Loops.WhileLoop;
+import com.Process;
 
 import java.util.HashMap;
 
@@ -86,14 +87,14 @@ public class ScopedBlockRunnerFactory {
 
     }
 
-    public ScopedBlockRunner createSpecialBlockRunner(ScopedBlockRunnerTypes type, String codeBlock, Scope scope) throws Exception {
+    public ScopedBlockRunner createSpecialBlockRunner(ScopedBlockRunnerTypes type, String codeBlock, Scope scope, Process process) throws Exception {
         switch (type) {
             case ForLoop:
-                return new ForLoop(codeBlock, scope);
+                return new ForLoop(codeBlock, scope, process);
             case WhileLoop:
-                return new WhileLoop(codeBlock, scope);
+                return new WhileLoop(codeBlock, scope, process);
             case ConditionalBlock:
-                return new IfStatement(codeBlock, scope);
+                return new IfStatement(codeBlock, scope, process);
         }
         throw new InternalException(InternalErrorCodes.UNKNOWN_BLOCK_TYPE);
     }
