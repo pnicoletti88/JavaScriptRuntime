@@ -1,6 +1,6 @@
 # JavaScriptRuntime
 
-Fun project to write a simple javascript style runtime. 
+Fun project to write a simple javascript style runtime. Examples usages can be seen in the integration tests: https://github.com/pnicoletti88/JavaScriptRuntime/tree/master/src/test/java/com/Processes
 
 Supported Features:
 - Variable decleration: 
@@ -11,7 +11,7 @@ Supported Features:
     - Variables have a scope, and the same variable can be redeclared in child scope.
 - Mathematical operations: 
     - +, -, *, / are currently supported for Numerical operations
-    - + is supported for strings
+    - \+ is supported for strings
 - Boolean operations: 
     - <, <=, ==, !=, >=, > for numbers
     - ==, != for strings
