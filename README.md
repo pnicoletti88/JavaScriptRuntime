@@ -2,6 +2,9 @@
 
 Fun project to write a simple javascript style runtime. Examples usages can be seen in the integration tests: https://github.com/pnicoletti88/JavaScriptRuntime/tree/master/src/test/java/com/Processes
 
+Tests:
+- 90% test coverage
+
 Supported Features:
 - Variable decleration: 
     - Number, String, Boolean and Undefined data type currently supported. 
@@ -28,5 +31,3 @@ Supported Features:
 - setTimeout:
     - Non-blocking setTimeout is supported
     
-Tests:
-- 90% test coverage
