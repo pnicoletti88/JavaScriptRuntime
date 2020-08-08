@@ -27,3 +27,6 @@ Supported Features:
     - Note that {} is required: ex if(true){do things...}
 - setTimeout:
     - Non-blocking setTimeout is supported
+    
+Tests:
+- 90% test coverage
